@@ -1,0 +1,26 @@
+.list-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+    margin-bottom: 10px;
+}
+
+.list-title {
+    width: 250px;
+}
+
+RouterLink {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.full-width {
+    width: 100%;
+}
+
+.nodeLabel > p {
+    font-size: 13px !important;
+    white-space: normal;
+    width: 150px;
+}

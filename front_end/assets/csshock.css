@@ -1,0 +1,179 @@
+/*
+ * CSShock v0.1
+ * Super fast style sheets
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Cabin:ital,wght@0,400..700;1,400..700&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+
+:root {
+    --black: #000000;
+    --white: #ffffff;
+    --red: #ff1c1c;
+    --orange: #ff991c;
+    --yellow: #ffe51c;
+    --green: #18DE71;
+    --blue: #1b76ff;
+    --purple: #a81cff;
+    --border: 1px solid;
+    --border-radius: 7px;
+    --background-color: var(--white);
+    --outer-margin: 10px;
+}
+
+html, body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--background-color);
+}
+
+h1, h2, h3, h4, h5, h6, p, a, span, li, input, label, select, button {
+    font-family: "Inter", sans-serif;
+    color: var(--black);
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+
+h1 {
+    font-size: 40px;
+    font-weight: 500;
+}
+
+h2 {
+    font-size: 35px;
+    font-weight: 500;
+}
+
+h3 {
+    font-size: 30px;
+    font-weight: 400;
+}
+
+h4 {
+    font-size: 25px;
+    font-weight: 400;
+}
+
+h5 {
+    font-size: 20px;
+    font-weight: 300;
+}
+
+h6 {
+    font-size: 15px;
+    font-weight: 300;
+}
+
+p, a, input, button, label, select {
+    font-size: 17px;
+    font-weight: 300;
+}
+
+input[type="submit"], button, select {
+    font-size: 14px;
+    font-weight: 300;
+}
+
+a {
+    color: var(--blue);
+}
+
+a:hover, input:hover, button:hover {
+    filter: brightness(130%);
+}
+
+a:active, input[type="submit"]:active, button:active {
+    filter: brightness(90%);
+}
+
+.red-fg { color: var(--red); }
+.orange-fg { color: var(--orange); }
+.yellow-fg { color: var(--yellow); }
+.green-fg { color: var(--green); }
+.blue-fg { color: var(--blue); }
+.purple-fg { color: var(--purple); }
+.black-fg { color: var(--black); }
+.white-fg { color: var(--white); }
+
+.red-bg { background-color: var(--red); }
+.orange-bg { background-color: var(--orange); }
+.yellow-bg { background-color: var(--yellow); }
+.green-bg { background-color: var(--green); }
+.blue-bg { background-color: var(--blue); }
+.purple-bg { background-color: var(--purple); }
+.black-bg { background-color: var(--black); }
+.white-bg { background-color: var(--white); }
+
+.border {
+    border: var(--border);
+}
+
+.border-rnd {
+    border-radius: var(--border-radius);
+}
+
+input[type="submit"], button {
+    border: none;
+    padding: 7px;
+    border-radius: var(--border-radius);
+    color: var(--white);
+    background-color: var(--blue);
+}
+
+textarea, input[type="text"], input[type="number"] {
+    border: var(--border);
+    border-radius: var(--border-radius);
+    padding: 7px;
+    outline: none;
+}
+
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg fill='black' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+  background-repeat: no-repeat;
+  background-position-x: 100%;
+  background-position-y: 5px;
+  background-color: var(--white);
+  border: var(--border);
+  border-radius: var(--border-radius);
+  padding: 5px;
+  padding-right: 25px;
+}
+
+.bunch {
+    display: flex;
+}
+
+.bunch > * {
+    margin-right: var(--outer-margin);
+    margin-left: var(--outer-margin);
+}
+
+nav {
+    display: flex;
+    flex-direction: vertical;
+    justify-content: space-between;
+    align-items: center;
+    height: 50px;
+    padding-left: var(--outer-margin);
+    padding-right: var(--outer-margin);
+}
+
+.container {
+    margin: var(--outer-margin);
+}
+
+@media only screen and (max-width: 567px) {
+    .bunch {
+        flex-direction: column;
+    }
+
+    nav > .bunch {
+        align-items: center;
+    }
+
+    nav {
+        flex-direction: column;
+        height: auto;
+    }
+}
