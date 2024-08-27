@@ -1,13 +1,24 @@
 const { Schedule } = require('../models/index.js');
+const { fn, col, literal } = require('sequelize');
 
 module.exports.getAll = async (request, response) => {
     // Get all models
     const schedule = await Schedule.findAll({
-        order: [['date', 'ASC']]
+        order: [['date', 'ASC'], ['kind', 'ASC']],
+    });
+
+    var result = {};
+
+    schedule.forEach(record => {
+        if (record.date in result) {
+            result[record.date].push(record);
+        } else {
+            result[record.date] = [record];
+        }
     });
 
     // Send the response
-    response.status(200).json(schedule)
+    response.status(200).json(result)
 };
 
 module.exports.post = async (request, response) => {

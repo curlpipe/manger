@@ -8,12 +8,8 @@
         <div class="bunch">
             <RouterLink class="white-fg" to="/pantry">Pantry</RouterLink>
             <RouterLink class="white-fg" to="/cookbook">Cookbook</RouterLink>
-            <a class="white-fg" href="/mealplans">Meal Plans</a>
-            <a class="white-fg" href="/getcooking">Get Cooking</a>
+            <RouterLink class="white-fg" to="/mealplans">Meal Plans</RouterLink>
+            <RouterLink class="white-fg" to="/getcooking">Get Cooking</RouterLink>
         </div>
     </nav>
 </template>
-
-<style scoped>
-
-</style>

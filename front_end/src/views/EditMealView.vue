@@ -11,53 +11,65 @@ const router = useRouter();
 const mealStore = useMealStore();
 const ingredientStore = useIngredientStore();
 
-onMounted(async () => {
-    // Load inventory from database
-    ingredientStore.query();
+const props = defineProps({
+    id: String,
 });
 
-const name = ref('');
-const time = ref(0);
-const difficulty = ref('easy');
-var instructions = ref([
-    {command: "Gather ingredients", timer: null, next: [1]}, // step 0
-    {command: "Gather utensils", timer: null, next: [2, 5]}, // step 1
-    {command: "Boil the kettle", timer: null, next: [3]}, // step 2
-    {command: "Add noodles and water to the pot", timer: null, next: [4]}, // step 3
-    {command: "Boil the noodles for 8 mins", timer: 8, next: [7]}, // step 4
-    {command: "Chop up the vegetables", timer: null, next: [6]}, // step 5
-    {command: "Fry the oil and veg for 5 minutes", timer: 5, next: [7]}, // step 6
-    {command: "Add the noodles, fry for 3 minutes", timer: 3, next: [8]}, // step 7
-    {command: "Serve", timer: null, next: []}, // step 8
-]);
-var ingredients = reactive([]);
-const notes = ref('');
-const rating = ref(null);
+var data = {};
+
+var name = ref(data.name);
+var time = ref(data.time);
+var difficulty = ref(data.difficulty);
+var instructions = ref([]);
+var ingredients = ref([]);
+var rating = ref(data.rating);
+var notes = ref(data.notes);
 
 const ingred_id = ref(1);
 const ingred_amount = ref(0);
 
 var instructions_json = ref('');
-instructions.value.forEach((i, idx) => {
-    instructions_json.value += `${idx}: ${i.command}(${i.timer}) -> ${i.next}\n`;
+
+onMounted(async () => {
+    try {
+        ingredientStore.query();
+        mealStore.query();
+        let response = await axios.get(`/api/meal/${props.id}`);
+        data = response.data;
+        name.value = data.name;
+        time.value = data.time;
+        difficulty.value = data.difficulty;
+        instructions.value = data.instructions;
+        data.ingredients.map(i => i.amount = i.MealIngredients.amount);
+        ingredients.value = data.ingredients;
+        rating.value = data.rating;
+        notes.value = data.notes;
+        instructions_json.value = '';
+        instructions.value.forEach((i, idx) => {
+            instructions_json.value += `${idx}: ${i.command}(${i.timer}) -> ${i.next}\n`;
+        });
+
+    } catch (error) {
+        console.error(error);
+    }
 });
 
-const createMeal = () => {
+const applyEdit = async () => {
     // Gather form data
     const body = {
         name: name.value,
         time: time.value,
         difficulty: difficulty.value,
         instructions: instructions.value,
-        ingredients: ingredients,
-        notes: notes.value,
+        ingredients: ingredients.value,
         rating: rating.value,
+        notes: notes.value,
     };
-    console.log(body);
     // Update database
     try {
-        const add_response = axios.post('/api/meal', body);
+        const add_response = axios.put(`/api/meal/${props.id}`, body);
         // Return the user to the list of meals
+        await mealStore.query();
         router.push('/cookbook');
     } catch (error) {
         console.error('Failed to create new meal');
@@ -80,23 +92,21 @@ const mealFlowChange = () => {
 };
 
 const addIngredientToMeal = () => {
-    // Add ingredient to the meal
     const info = ingredientStore.getIngredients.find(i => i.id == ingred_id.value);
-    ingredients.push({ id: ingred_id.value, name: info.name, amount: ingred_amount.value, unit: info.unit });
+    ingredients.value.push({ id: ingred_id.value, name: info.name, amount: ingred_amount.value, unit: info.unit });
 };
 
 const removeIngredientFromMeal = (id) => {
-    const idx = ingredients.findIndex(i => i.id == id);
-    ingredients.splice(idx, 1);
+    const idx = ingredients.value.findIndex(i => i.id == id);
+    ingredients.value.splice(idx, 1);
 };
 
 </script>
 
 <template>
-    <h4>Create New Meal</h4>
+    <h4>Edit Meal</h4>
     <div class="bunch">
-        <!-- Main form for meal details -->
-        <form @submit.prevent="createMeal">
+        <form @submit.prevent="applyEdit">
             <label for="name">Meal Name: </label>
             <input type="text" id="name" name="name" v-model="name">
             <br>
@@ -117,7 +127,6 @@ const removeIngredientFromMeal = (id) => {
                 <option :value="false">dislike</option>
             </select>
             <br>
-            <!-- Sub-form to attach ingredients to the meal -->
             <form @submit.prevent="addIngredientToMeal">
                 <br>
                 <IngredientOverview :ingredients="ingredients" @delete-ingredient="removeIngredientFromMeal"/>
@@ -136,9 +145,8 @@ const removeIngredientFromMeal = (id) => {
             <br>
             <textarea rows="5" cols="48" id="notes" name="notes" v-model="notes"></textarea>
             <br>
-            <input type="submit" value="Create New Meal">
+            <input type="submit" value="Apply Edits">
         </form>
-        <!-- Form  to modify and change the flow of the meal -->
         <form @submit.prevent="mealFlowChange">
             <div id="instructions"></div>
             <MealFlow :instructions="instructions" />
