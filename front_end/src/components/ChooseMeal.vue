@@ -3,11 +3,13 @@ import { ref } from 'vue';
 
 defineProps({
     meals: Array,
+    plans: Array,
     type: String,
 });
 
 const meal = ref(1);
 const kind = ref('breakfast');
+const plan = ref(1);
 </script>
 
 <template>
@@ -29,5 +31,17 @@ const kind = ref('breakfast');
             </div>
             <input type="submit" value="Select">
         </form>
+        <div v-if="type == 'schedule'">
+            <hr>
+            <h4>Activate a meal plan</h4>
+            <form @submit.prevent="$emit('activatePlan', plan)">
+                <label for="meal">Plan: </label>
+                <select id="plan" name="plan" v-model="plan">
+                    <option v-for="plan in plans" :value="plan.id">{{ plan.name }}</option>
+                </select>
+                <br>
+                <input type="submit" value="Activate">
+            </form>
+        </div>
     </div>
 </template>

@@ -2,10 +2,12 @@
 import ChooseMeal from '@/components/ChooseMeal.vue';
 import dateUtils from '@/utils/dateUtils.js';
 import { useMealStore } from '@/stores/useMealStore.js';
+import { useMealPlanStore } from '@/stores/useMealPlanStore.js';
 import axios from 'axios';
 import { ref, onMounted } from 'vue';
 
 const mealStore = useMealStore();
+const mealPlanStore = useMealPlanStore();
 
 var schedule = ref({});
 const shown = ref(false);
@@ -34,6 +36,7 @@ const getSchedule = async () => {
 
 onMounted(async () => {
     await mealStore.query();
+    await mealPlanStore.query();
     await getSchedule();
 });
 
@@ -66,6 +69,30 @@ const removeMeal = async (id) => {
     // Refresh the schedule
     getSchedule();
 };
+
+const activatePlan = async (id) => {
+    closePopup();
+    // Add meals from the plan to the schedule one by one
+    const response = await axios.get(`/api/plan/${id}`);
+    const meals = response.data.content;
+    let at = addingTo;
+    for (const day of meals) {
+        for (const meal of ['breakfast', 'lunch', 'brunch', 'dinner', 'snack']) {
+            if (day[meal] != null) {
+                // Add to the database
+                const body = {
+                    meal_id: day[meal],
+                    kind: meal,
+                    date: at,
+                };
+                await axios.post('/api/schedule', body);
+            }
+        }
+        at = dateUtils.incrementDate(at);
+    }
+    // Refresh the schedule
+    await getSchedule();
+};
 </script>
 
 <template>
@@ -74,8 +101,10 @@ const removeMeal = async (id) => {
         v-if="shown" 
         type="schedule"
         :meals="mealStore.getMeals" 
+        :plans="mealPlanStore.getMealPlans"
         @select-meal="selectMeal" 
         @close-popup="closePopup"
+        @activate-plan="activatePlan"
     />
     <!-- Schedule list -->
     <h4>Schedule</h4>
