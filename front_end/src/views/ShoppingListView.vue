@@ -23,10 +23,7 @@ onMounted(async () => {
 });
 
 const days = ref(7);
-const list = ref([
-    { amount: "200g", name: "Butter" },
-    { amount: "2 units", name: "Red Pepper" },
-]);
+const list = ref([]);
 
 const generateList = async () => {
     // 1. Get list of all the meals to be cooked in this period
@@ -143,7 +140,7 @@ const printMe = () => {
 </script>
 
 <template>
-    <h4>Shopping List</h4>
+    <h4>Shopping List Print-Outs</h4>
     <p>
         Here you can generate a printable shopping list for you to take shopping.
         <br>
@@ -162,8 +159,9 @@ const printMe = () => {
         <br>
     </p>
     <form @submit.prevent="generateList">
-        <div class="bunch">
+        <div style="display: flex;">
             <input type="checkbox" v-model="subtractInventory" />
+            <div style="width: 10px;"></div>
             <p>Subtract existing inventory</p>
         </div>
 
@@ -174,8 +172,10 @@ const printMe = () => {
     <div id="printable-list" v-if="showList">
         <p><b>Shopping List from {{ startDate }} to {{ endDate }}</b></p>
         <br>
-        <div class="bunch" v-for="item in list">
-            <input type="checkbox"><p>{{ item.name }} ({{ item.amount }}{{ item.unit }})</p>
+        <div style="display: flex;" v-for="item in list">
+            <input type="checkbox">
+            <div style="width: 10px;"></div>
+            <p>{{ item.name }} ({{ item.amount }}{{ item.unit }})</p>
         </div>
     </div>
     <button @click="printMe">Print</button>
