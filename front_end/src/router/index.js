@@ -9,6 +9,7 @@ import MealPlanView from '@/views/MealPlanView.vue';
 import NewMealPlanView from '@/views/NewMealPlanView.vue';
 import EditMealPlanView from '@/views/EditMealPlanView.vue';
 import GetCookingView from '@/views/GetCookingView.vue';
+import ShoppingListView from '@/views/ShoppingListView.vue';
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -65,6 +66,11 @@ const router = createRouter({
             path: '/getcooking',
             name: 'get_cooking',
             component: GetCookingView,
+        },
+        {
+            path: '/getcooking/shoppinglist',
+            name: 'shopping_list',
+            component: ShoppingListView,
         },
     ]
 });

@@ -109,6 +109,8 @@ const activatePlan = async (id) => {
     <!-- Schedule list -->
     <h4>Schedule</h4>
     <p>Click a meal to start cooking</p>
+    <p>Alternatively, select an option below for useful print-outs</p>
+    <RouterLink to="/getcooking/shoppinglist"><button>Shopping List</button></RouterLink>
     <br>
     <div>
         <div v-for="(data, date) in schedule" style="margin-bottom: 40px;">
