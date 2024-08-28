@@ -1,6 +1,7 @@
 <script setup>
 defineProps({
     meals: Array,
+    selected: Number,
 });
 
 
@@ -22,7 +23,8 @@ defineProps({
                     <h5 class="red-fg" v-if="meal.rating == false">&#128078;</h5>
                 </div>
                 <form @submit.prevent="$emit('selectMeal', meal.id)">
-                    <button class="blue-bg" style="font-weight: bold; font-size: 20px; margin: 15px;">&#10003;</button>
+                    <button v-if="meal.id == selected" class="green-bg" style="font-weight: bold; font-size: 20px; margin: 15px;">&#10003;</button>
+                    <button v-else class="blue-bg" style="font-weight: bold; font-size: 20px; margin: 15px;">&#10003;</button>
                 </form>
             </div>
             <div style="padding-left: 25px; padding-bottom: 10px;">

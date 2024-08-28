@@ -61,7 +61,7 @@ const selectMeal = async (id, kind) => {
     };
     await axios.post('/api/schedule', body);
     // Refresh the schedule
-    getSchedule();
+    await getSchedule();
 };
 
 const removeMeal = async (id) => {
