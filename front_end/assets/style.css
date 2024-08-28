@@ -35,3 +35,17 @@ RouterLink {
     padding: 10px;
     z-index: 2;
 }
+
+.fade-in-out {
+    animation: fadeInOut 1s 20;
+}
+
+@keyframes fadeInOut {
+  0%, 50% { visibility: visible; } /* Fully transparent at the start and end */
+  50.1%, 100% { visibility: hidden; }     /* Fully opaque at the midpoint */
+}
+
+.timer-btn {
+    font-size: 12px;
+    font-weight: 500;
+}

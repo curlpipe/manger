@@ -3,7 +3,7 @@
 </script>
 
 <template>
-    <nav class="blue-bg">
+    <nav class="blue-bg" id="navbar">
         <h4 class="white-fg">Manger</h4>
         <div class="bunch">
             <RouterLink class="white-fg" to="/pantry">Pantry</RouterLink>
