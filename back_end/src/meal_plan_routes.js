@@ -4,8 +4,25 @@ module.exports.getAll = async (request, response) => {
     // Get all models
     var plans = await MealPlanInfo.findAll();
 
+    // For each meal plan, attach content
+    const result = await Promise.all(plans.map(async plan => {
+        // Attach content of meal plan
+        const links = await MealPlan.findAll({ where: { id: plan.id } });
+        const part = plan.toJSON();
+        part.content = [];
+        links.forEach(link => {
+            link = link.toJSON();
+            delete link.id;
+            delete link.day;
+            delete link.createdAt;
+            delete link.updatedAt;
+            part.content.push(link);
+        });
+        return part;
+    }));
+
     // Send the response
-    response.status(200).json(plans)
+    response.status(200).json(result)
 };
 
 module.exports.get = async (request, response) => {

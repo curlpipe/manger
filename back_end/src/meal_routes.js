@@ -2,10 +2,23 @@ const { Meal, MealIngredient, Ingredient } = require('../models/index.js');
 
 module.exports.getAll = async (request, response) => {
     // Get all models
-    const meals = await Meal.findAll();
+    const meals = await Meal.findAll({
+        include: [{
+            model: Ingredient,
+            through: { attributes: ['amount'] }
+        }]
+    });
+
+    // Rename ingredient fields
+    const result = meals.map(meal => {
+        meal = meal.toJSON();
+        meal.ingredients = meal['Ingredients'];
+        delete meal['Ingredients'];
+        return meal;
+    });
 
     // Send the response
-    response.status(200).json(meals)
+    response.status(200).json(result)
 };
 
 module.exports.get = async (request, response) => {

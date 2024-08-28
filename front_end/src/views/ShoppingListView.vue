@@ -51,8 +51,7 @@ const generateList = async () => {
 
     let allIngredients = {};
     for (const meal of allMeals) {
-        const response = await axios.get(`/api/meal/${meal.id}`);
-        const ingredients = response.data.ingredients;
+        const ingredients = mealStore.getMeals.find(m => m.id == meal.id).ingredients;
         for (const ingredient of ingredients) {
             if (ingredient.id in allIngredients) {
                 allIngredients[ingredient.id].MealIngredients.amount += ingredient.MealIngredients.amount;

@@ -32,10 +32,9 @@ var instructions_json = ref('');
 
 onMounted(async () => {
     try {
-        ingredientStore.query();
-        mealStore.query();
-        let response = await axios.get(`/api/meal/${props.id}`);
-        data = response.data;
+        await ingredientStore.query();
+        await mealStore.query();
+        data = mealStore.getMeals.find(meal => meal.id == props.id);
         name.value = data.name;
         time.value = data.time;
         difficulty.value = data.difficulty;
