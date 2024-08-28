@@ -17,6 +17,47 @@ module.exports.getAll = async (request, response) => {
         return meal;
     });
 
+    // Calculate meal score
+    result.forEach(meal => {
+        let the_good = [];
+        let the_bad = [];
+        let need_to_buy = meal.ingredients
+            .filter(i => (i.quantity - i.MealIngredients.amount) <= 0)
+            .length;
+        need_to_buy = 1 - (Math.min(need_to_buy, 20) / 20);
+        let rating = meal.rating == null ? 0.5 : (meal.rating ? 1 : 0);
+        let difficulty = meal.difficulty == 'hard' ? 0 : (meal.difficulty == 'easy' ? 1 : 0.5);
+        let time = 1 - Math.min(meal.time, 220) / 220;
+        if (need_to_buy <= 5) {
+            the_good.push("It makes good use of ingredients you already have");
+        } else if (need_to_buy > 10) {
+            the_bad.push("It will require the purchasing of quite a few new ingredients");
+        }
+        if (rating == 1) {
+            the_good.push("This recipe is rated highly in terms of preference");
+        } else {
+            the_bad.push("This recipe is not rated highly in terms of preference");
+        }
+        if (difficulty == 0) {
+            the_bad.push("This recipe is difficult to make");
+        } else if (difficulty == 1) {
+            the_good.push("This recipe is easy to make");
+        }
+        if (time > 0.7) {
+            the_good.push("This recipe is quick to make");
+        } else if (time < 0.5) {
+            the_bad.push("This recipe takes a while to make");
+        }
+        let score = need_to_buy * 0.25 + rating * 0.35 + difficulty * 0.15 + time * 0.25;
+        meal.score = parseFloat(score.toFixed(2));
+        meal.explanation = {
+            good: the_good,
+            bad: the_bad,
+        };
+    });
+
+    result.sort((a, b) => b.score - a.score);
+
     // Send the response
     response.status(200).json(result)
 };

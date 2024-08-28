@@ -8,9 +8,9 @@ defineProps({
 
 <template>
     <RouterLink to="/cookbook/add">
-        <button 
-            class="green-bg full-width"
-            style="font-weight: bold; font-size: 20px; padding-left: 12px; padding-right: 12px;"
+    <button 
+        class="green-bg full-width"
+        style="font-weight: bold; font-size: 20px; padding-left: 12px; padding-right: 12px;"
         >+</button>
     </RouterLink>
     <br>
