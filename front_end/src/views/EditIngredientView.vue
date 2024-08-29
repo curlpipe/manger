@@ -21,7 +21,7 @@ const name = ref(data.name);
 const quantity = ref(data.quantity);
 const unit = ref(data.unit);
 
-const applyEdit = () => {
+const applyEdit = async () => {
     // Gather form data
     const body = {
         name: name.value,
@@ -30,15 +30,8 @@ const applyEdit = () => {
     };
     // Update database
     try {
-        const add_response = axios.put(`/api/ingredient/${props.id}`, body);
-        const ingredients = ingredientStore.getIngredients;
-        const item = ingredients.findIndex(item => item.id == props.id);
-
-        ingredients[item].name = name.value;
-        ingredients[item].quantity = quantity.value;
-        ingredients[item].unit = unit.value;
-
-        ingredientStore.load(ingredients);
+        const response = axios.put(`/api/ingredient/${props.id}`, body);
+        await ingredientStore.query();
         // Return the user to the list of ingredients
         router.push('/pantry');
     } catch (error) {

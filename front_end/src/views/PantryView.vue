@@ -8,7 +8,7 @@ const ingredientStore = useIngredientStore();
 
 onMounted(async () => {
     // Load inventory from database
-    ingredientStore.query();
+    await ingredientStore.query();
 });
 </script>
 
