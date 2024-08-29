@@ -54,20 +54,22 @@ const generateList = async () => {
         const ingredients = mealStore.getMeals.find(m => m.id == meal.id).ingredients;
         for (const ingredient of ingredients) {
             if (ingredient.id in allIngredients) {
-                allIngredients[ingredient.id].MealIngredients.amount += ingredient.MealIngredients.amount;
+                allIngredients[ingredient.id] += ingredient.MealIngredients.amount;
             } else {
-                allIngredients[ingredient.id] = ingredient;
+                allIngredients[ingredient.id] = ingredient.MealIngredients.amount;
             }
         }
     }
 
-    allIngredients = Object.values(allIngredients)
+    allIngredients = Object.keys(allIngredients)
         .map(i => { 
+            const ingredient = ingredientStore.getIngredients.find(ing => ing.id == i)
+            const needed = allIngredients[i];
             return { 
-                id: i.id,
-                unit: i.unit,
-                name: i.name, 
-                amount: subtractInventory.value ? i.MealIngredients.amount - i.quantity : i.MealIngredients.amount,
+                id: ingredient.id,
+                unit: ingredient.unit,
+                name: ingredient.name, 
+                amount: subtractInventory.value ? needed - ingredient.quantity : needed,
             }
         })
         .filter(i => i.amount > 0);
@@ -111,7 +113,7 @@ const printMe = () => {
                     margin: 0;
                     padding: 0;
                 }
-                p { 
+                p, h5 { 
                     font-size: 17px;
                     font-weight: 300;
                     font-family: "Inter", sans-serif;
@@ -122,6 +124,10 @@ const printMe = () => {
                     margin-bottom: 5px;
                     margin-left: 30px;
                 }
+                h5 {
+                    font-size: 20px !important;
+                }
+                .shopping-list-item { margin-left: 30px; }
             </style>
             ${content}
             </html>
@@ -169,9 +175,10 @@ const printMe = () => {
         <input type="submit" value="Generate">
     </form>
     <div id="printable-list" v-if="showList">
-        <p><b>Shopping List from {{ startDate }} to {{ endDate }}</b></p>
+        <h5><b>Shopping List</b></h5>
+        <p>{{ startDate }} to {{ endDate }}</p>
         <br>
-        <div style="display: flex;" v-for="item in list">
+        <div class="shopping-list-item" style="display: flex;" v-for="item in list">
             <input type="checkbox">
             <div style="width: 10px;"></div>
             <p>{{ item.name }} ({{ item.amount }}{{ item.unit }})</p>
