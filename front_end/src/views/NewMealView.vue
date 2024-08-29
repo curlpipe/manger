@@ -53,7 +53,6 @@ const createMeal = () => {
         notes: notes.value,
         rating: rating.value,
     };
-    console.log(body);
     // Update database
     try {
         const add_response = axios.post('/api/meal', body);
