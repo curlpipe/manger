@@ -72,7 +72,7 @@ const mealFlowChange = () => {
             let [command_part, next] = line.split(' -> ');
             let [command, timer] = command_part.split('(');
             timer = timer.slice(0, -1);
-            next = next.split(',').filter(i => i.length === 1).map(i => parseInt(i));
+            next = next.split(',').filter(i => i != '').map(i => parseInt(i));
             timer = timer == 'null' ? null : parseInt(timer);
             instructions.value.push({ command, timer, next });
         }

@@ -1,0 +1,16 @@
+Thai Red Curry Bowls
+0: Gather 2 pans, a blender, a chopping board, a peeler, a knife, a bowl and a fork(null) -> 1
+1: Peel and top and tail the shallots, garlic, lemongrass, ginger, bell peppers and carrots(null) -> 2
+2: Cut the carrots and bell peppers into strands, and slice the limes into quarters(null) -> 3,7
+3: Fill and activate the kettle, waiting until boiled(null) -> 4
+4: Place the rice in a mug of water and mix it to remove the starch(3) -> 5
+5: Drain the rice and place it in a pan with the boiling water from the kettle, and boil(10) -> 6
+6: Drain the rice from the boiling water(null) -> 14
+7: Make your curry paste by adding in the shallots, chillies, paprika, ginger, the juice of 1 lime, garlic and lemongrass(null) -> 8
+8: Blend the soon-to-be paste until smooth(null) -> 9
+9: In the pan, add your carrots and peppers with the oil and fry them until mostly cooked through(null) -> 10
+10: Add the paste to the pan and fry(3) -> 11
+11: Add the coconut milk to the pan, stirring thoroughly(null) -> 12
+12: When thickened, add the peanut butter and fold it in(null) -> 13
+13: Put the rice in the bowl(null) -> 14
+14: Serve the curry on top of the rice(null) -> 
