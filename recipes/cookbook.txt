@@ -65,3 +65,29 @@ Bean and Sweetcorn Quesadilla
 8: Divide the cheese between each tortilla and top each with another tortilla(null) -> 9
 9: Place a clean frying pan over medium-low heat, cook the quesadilla until crisp and the cheese melts(2) -> 10
 10: Serve with the remaining lime half(null) -> 
+
+Veggie Pasta One Pot
+
+0: Gather a large pan, spoon, grater, and two plates(null) -> 1
+1: Heat oil in a large pan over medium heat and fry the onions, stirring often until golden(10) -> 2,3
+2: While the onions are frying, prepare the peppers, aubergine, garlic, paprika, passata, and stock(null) -> 4
+3: Grate the cheese and set it aside(null) -> 4
+4: Add the prepared peppers, aubergine, garlic, paprika, passata, and stock to the pan, then cover and simmer(10) -> 5,6
+5: Stir in the penne, bring back to the boil, reduce heat, and cook, covered(13.5) -> 7
+6: While the pan simmers, gather the basil and olives and set them aside(null) -> 7
+7: Stir in the basil and olives, remove from heat, and leave to stand(5) -> 8
+8: Divide the mixture between 4 plates and add the cheese over the top(null) -> 
+
+Laksa
+
+0: Gather a pan, food processor, saucepan, spoon, knife, and chopping board(null) -> 1
+1: Add 1 teaspoon each of ground coriander, paprika, and ground cumin to a pan and heat until fragrant(1) -> 2
+2: Transfer the spices to a food processor along with the deseeded red chillies, roughly chopped brown onion, white part of the lemongrass stalks, a small grated piece of ginger, 2 peeled garlic cloves, and a glug of vegetable oil. Blitz to combine(null) -> 3,4
+3: Add the paste to a saucepan and fry(4) -> 5
+4: Finely slice the carrots and courgettes(null) -> 5
+5: Add the sliced vegetables and coconut milk to the pan(null) -> 6,7
+6: Bring the pan to boil(null) -> 8
+7: Chop up the sugar snap peas, coriander and lime into quarters(null) -> 9
+8: Add the rice noodles and cook until soft(null) -> 9
+9: Turn off the heat, add sliced sugar snap peas, a handful of chopped coriander, and squeeze the lime over the top(null) -> 10
+10: Serve up and enjoy(null) -> 
