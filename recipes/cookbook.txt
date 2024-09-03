@@ -101,3 +101,20 @@ Sesame, radish and tofu salad
 4: Put the cooled sesame seeds and remaining dressing ingredients in a high-speed blender and blend until smooth(null) -> 5
 5: Arrange the salad leaves, radishes, cucumber, avocados, and tofu on plates(null) -> 6
 6: Spoon over the sesame dressing and serve immediately(null) -> 
+
+Roast Vegetable Gyros
+
+0: Gather a baking tray, small frying pan, high-speed blender, mixing bowl, spoon, knife, chopping board, and plates(null) -> 1,2
+1: Preheat your oven to 180°C fan(null) -> 4
+2: De-seed and chop peppers, courgettes, and red onion into bite-sized pieces(null) -> 3
+3: Break the cauliflower into little florets(null) -> 4
+4: Place the chopped vegetables and cauliflower into a baking tray(null) -> 5
+5: Pour in the tin of chickpeas with some of the starchy water. Add a good glug of olive oil, the cayenne pepper powder, garam masala, a sprinkle of salt and pepper, and mix everything together(null) -> 6,7
+6: Roast in the oven(30) -> 9
+7: Make the tzatziki by pouring the pot of coconut yoghurt into a mixing bowl(null) -> 8
+8: Add finely chopped mint leaves, the juice of a lemon, the grated cucumber, and a grated garlic clove to the yoghurt, seasoning well and mixing together(null) -> 9
+9: Remove the roasted vegetables from the oven, and mix them(null) -> 10,11
+10: Place the vegetables back in the oven(15) -> 12
+11: Warm the pittas when there is 5 minutes left on the vegetable roasting(null) -> 12
+12: Split open the warmed pittas and load each with spiced vegetables, tzatziki, pomegranate seeds, and more vegetables and tzatziki as desired(null) -> 13
+13: Serve and enjoy(null) -> 
