@@ -91,3 +91,13 @@ Laksa
 8: Add the rice noodles and cook until soft(null) -> 9
 9: Turn off the heat, add sliced sugar snap peas, a handful of chopped coriander, and squeeze the lime over the top(null) -> 10
 10: Serve up and enjoy(null) -> 
+
+Sesame, radish and tofu salad
+
+0: Gather a small frying pan, high-speed blender and plates(null) -> 1,2
+1: Put the sesame seeds in a small frying pan and cook over medium-high heat, stirring regularly until golden and fragrant(4) -> 3
+2: While the sesame seeds are cooking, prepare the salad ingredients(null) -> 3
+3: Set the toasted sesame seeds aside to cool(null) -> 4
+4: Put the cooled sesame seeds and remaining dressing ingredients in a high-speed blender and blend until smooth(null) -> 5
+5: Arrange the salad leaves, radishes, cucumber, avocados, and tofu on plates(null) -> 6
+6: Spoon over the sesame dressing and serve immediately(null) -> 
