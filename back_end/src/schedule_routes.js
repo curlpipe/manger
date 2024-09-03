@@ -48,9 +48,9 @@ module.exports.put = async (request, response) => {
     if (!model) { return response.status(404).json({ message: 'Schedule item not found' }) }
 
     // Update the model with new data
-    model.date = date || model.date;
-    model.kind = kind || model.kind;
-    model.meal_id = meal_id || model.meal_id;
+    model.date = date ?? model.date;
+    model.kind = kind ?? model.kind;
+    model.meal_id = meal_id ?? model.meal_id;
 
     // Save the model and send the appropriate response
     await model.save()

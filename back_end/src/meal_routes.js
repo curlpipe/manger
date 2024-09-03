@@ -119,12 +119,12 @@ module.exports.put = async (request, response) => {
     if (!model) { return response.status(404).json({ message: 'Meal not found' }) }
 
     // Update the model with new data
-    model.name = name || model.name;
-    model.time = time || model.time;
-    model.difficulty = difficulty || model.difficulty;
-    model.instructions = instructions || model.instructions;
-    model.notes = notes || model.notes;
-    model.rating = rating || model.rating;
+    model.name = name ?? model.name;
+    model.time = time ?? model.time;
+    model.difficulty = difficulty ?? model.difficulty;
+    model.instructions = instructions ?? model.instructions;
+    model.notes = notes ?? model.notes;
+    model.rating = rating ?? model.rating;
 
     // Remove all ingredients (if applicable)
     if (ingredients != null) { await MealIngredient.destroy({ where: { meal_id: id } }) }

@@ -47,9 +47,9 @@ module.exports.put = async (request, response) => {
     if (!model) { return response.status(404).json({ message: 'Ingredient not found' }) }
 
     // Update the model with new data
-    model.name = name || model.name;
-    model.quantity = quantity || model.quantity;
-    model.unit = unit || model.unit;
+    model.name = name ?? model.name;
+    model.quantity = quantity ?? model.quantity;
+    model.unit = unit ?? model.unit;
 
     // Save the model and send the appropriate response
     await model.save()

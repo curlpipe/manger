@@ -86,8 +86,8 @@ module.exports.put = async (request, response) => {
     if (!model) { return response.status(404).json({ message: 'Meal not found' }) }
 
     // Update the model with new data
-    model.name = name || model.name;
-    model.notes = notes || model.notes;
+    model.name = name ?? model.name;
+    model.notes = notes ?? model.notes;
 
     // Remove all attached meals (if applicable)
     if (content != null) { await MealPlan.destroy({ where: { id } }) }
