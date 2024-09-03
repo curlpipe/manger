@@ -24,7 +24,6 @@ module.exports.getAll = async (request, response) => {
         let need_to_buy = meal.ingredients
             .filter(i => (i.quantity - i.MealIngredients.amount) <= 0)
             .length;
-        need_to_buy = 1 - (Math.min(need_to_buy, 20) / 20);
         let rating = meal.rating == null ? 0.5 : (meal.rating ? 1 : 0);
         let difficulty = meal.difficulty == 'hard' ? 0 : (meal.difficulty == 'easy' ? 1 : 0.5);
         let time = 1 - Math.min(meal.time, 220) / 220;
@@ -33,6 +32,7 @@ module.exports.getAll = async (request, response) => {
         } else if (need_to_buy > 7) {
             the_bad.push("It will require the purchasing of quite a few new ingredients");
         }
+        need_to_buy = 1 - (Math.min(need_to_buy, 20) / 20);
         if (rating == 1) {
             the_good.push("This recipe is rated highly in terms of preference");
         } else {
