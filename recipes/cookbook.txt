@@ -36,3 +36,18 @@ Vegan Banh Mi
 14: Let the paté cool to room temperature, and then put it in the fridge(null) -> 15
 15: Cut the baguette into 4 pieces and drain the pickled vegetables from the fridge(null) -> 16
 16: Cut open each baguette and layer on the paté, tofu, all the veg and coriander(null) -> 
+
+Pasta Pesto
+
+0: Gather a pot, bowl, fork, and teaspoon(null) -> 1
+1: Fill and boil a kettle full of water(null) -> 2,3
+2: Heat the pot on the hob(null) -> 4
+3: Measure out the pasta and store in the bowl(null) -> 4
+4: Pour the boiled water into the pot with the pasta(null) -> 5,6
+5: Boil the pasta(7) -> 7
+6: Measure out the broccoli, and peas, and store them in the bowl(null) -> 7
+7: Add the broccoli and peas to the boiling pasta(null) -> 8,9
+8: Measure out and chop the olives(null) -> 10
+9: Continue boiling(4) -> 10
+10: Drain the pasta and vegetables, then add the pesto, olives, and cheese if using, and stir well(null) -> 11
+11: Serve(null) -> 
