@@ -37,6 +37,7 @@ Vegan Banh Mi
 15: Cut the baguette into 4 pieces and drain the pickled vegetables from the fridge(null) -> 16
 16: Cut open each baguette and layer on the paté, tofu, all the veg and coriander(null) -> 
 
+
 Pasta Pesto
 
 0: Gather a pot, bowl, fork, and teaspoon(null) -> 1
@@ -51,6 +52,7 @@ Pasta Pesto
 9: Continue boiling(4) -> 10
 10: Drain the pasta and vegetables, then add the pesto, olives, and cheese if using, and stir well(null) -> 11
 11: Serve(null) -> 
+
 
 Bean and Sweetcorn Quesadilla
 
@@ -68,6 +70,7 @@ Bean and Sweetcorn Quesadilla
 11: Place a clean frying pan over medium-low heat, cook the quesadilla until crisp and the cheese melts(2) -> 12
 12: Serve with the remaining lime half(null) -> 
 
+
 Veggie Pasta One Pot
 
 0: Gather a large pan, spoon, grater, and two plates(null) -> 1
@@ -79,6 +82,7 @@ Veggie Pasta One Pot
 6: While the pan simmers, gather the basil and olives and set them aside(null) -> 7
 7: Stir in the basil and olives, remove from heat, and leave to stand(5) -> 8
 8: Divide the mixture between 4 plates and add the cheese over the top(null) -> 
+
 
 Laksa
 
@@ -94,6 +98,7 @@ Laksa
 9: Turn off the heat, add sliced sugar snap peas, a handful of chopped coriander, and squeeze the lime over the top(null) -> 10
 10: Serve up and enjoy(null) -> 
 
+
 Sesame, radish and tofu salad
 
 0: Gather a small frying pan, high-speed blender and plates(null) -> 1,2
@@ -103,6 +108,7 @@ Sesame, radish and tofu salad
 4: Put the cooled sesame seeds and remaining dressing ingredients in a high-speed blender and blend until smooth(null) -> 5
 5: Arrange the salad leaves, radishes, cucumber, avocados, and tofu on plates(null) -> 6
 6: Spoon over the sesame dressing and serve immediately(null) -> 
+
 
 Roast Vegetable Gyros
 
@@ -120,3 +126,35 @@ Roast Vegetable Gyros
 11: Warm the pittas when there is 5 minutes left on the vegetable roasting(null) -> 12
 12: Split open the warmed pittas and load each with spiced vegetables, tzatziki, pomegranate seeds, and more vegetables and tzatziki as desired(null) -> 13
 13: Serve and enjoy(null) -> 
+
+
+Creamy Vegan Korma
+
+0: Gather a baking tray, large frying pan, separate pan for rice, chopping board, knife, grater, and spoon(null) -> 1,2
+1: Preheat your oven to 180°C fan(null) -> 3
+2: Cube the aubergine, de-seed and peel the butternut squash(null) -> 3
+3: Add the aubergine and butternut squash to a baking tray. Drizzle with olive oil, season with salt and pepper(null) -> 4,5,7
+4: Roast the tray in the oven(35) -> 10
+5: Finely chop the brown onion, grate a thumb-sized piece of ginger, and 2 garlic cloves(null) -> 6
+6: Heat 1½ tablespoons of sesame oil in a large frying pan, add the onion, ginger, and garlic, and fry until soft(null) -> 8
+7: Start cooking the basmati rice in a separate pan according to the packet instructions(null) -> 9
+8: Add 2 teaspoons of garam masala, 1 teaspoon of chilli flakes, and 2 tablespoons of tomato purée to the frying pan. Stir everything together, then add 200 ml of water(null) -> 10
+9: Once the vegetables are roasted, remove them from the oven(null) -> 10
+10: Add the yogurt to the korma and stir it in. Add your roasted vegetables, a large handful of chopped coriander, reserving some to garnish, 60g of cashew nuts, and the juice of a lime. Stir everything together(null) -> 11
+11: Serve the korma over the steaming hot rice, with the remaining chopped coriander scattered on top(null) -> 
+
+
+Black Pepper Tofu
+
+0: Gather a wok, pan for rice, knife, chopping board, spoon, and a strainer(null) -> 1
+1: Chop the tofu into cubes and coat them in cornflour(null) -> 2,3
+2: Chop the onion, 2 garlic cloves, and a large piece of fresh ginger(null) -> 5
+3: Add vegetable oil to a wok and stir-fry the tofu until browned. Remove the tofu from the wok(null) -> 4
+4: Get the rice on and cook it according to the packet instructions(null) -> 5
+5: Clean the wok and place it over medium heat. Add a splash of vegetable oil(null) -> 6
+6: Add 4 tablespoons of butter, the chopped onion, garlic, and ginger to the wok. Stir-fry until soft(null) -> 7
+7: Add 2 tablespoons of crushed black peppercorns and 2 tablespoons of white sugar. Stir until the sugar dissolves(null) -> 8
+8: Add 5 tablespoons each of light and dark soy sauces and stir everything together(null) -> 9
+9: Add the chopped and de-seeded red chilli and 3 chopped spring onions. Stir everything, then re-add the tofu and stir it in(null) -> 10
+10: Add another tablespoon of butter, allow it to melt, then remove the wok from the heat(null) -> 11
+11: Serve the tofu on top of the rice, garnish with the remaining chopped spring onion and extra chilli(null) -> ng onion and extra chilli(null) -> 
