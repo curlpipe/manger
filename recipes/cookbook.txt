@@ -133,15 +133,14 @@ Creamy Vegan Korma
 0: Gather a baking tray, large frying pan, separate pan for rice, chopping board, knife, grater, and spoon(null) -> 1,2
 1: Preheat your oven to 180°C fan(null) -> 3
 2: Cube the aubergine, de-seed and peel the butternut squash(null) -> 3
-3: Add the aubergine and butternut squash to a baking tray. Drizzle with olive oil, season with salt and pepper(null) -> 4,5,7
-4: Roast the tray in the oven(35) -> 10
-5: Finely chop the brown onion, grate a thumb-sized piece of ginger, and 2 garlic cloves(null) -> 6
+3: Add the aubergine and butternut squash to a baking tray. Drizzle with olive oil, season with salt and pepper(null) -> 4,5
+4: Roast the tray in the oven(35) -> 9
+5: Finely chop the brown onion, grate a thumb-sized piece of ginger, and 2 garlic cloves(null) -> 6,7
 6: Heat 1½ tablespoons of sesame oil in a large frying pan, add the onion, ginger, and garlic, and fry until soft(null) -> 8
-7: Start cooking the basmati rice in a separate pan according to the packet instructions(null) -> 9
-8: Add 2 teaspoons of garam masala, 1 teaspoon of chilli flakes, and 2 tablespoons of tomato purée to the frying pan. Stir everything together, then add 200 ml of water(null) -> 10
-9: Once the vegetables are roasted, remove them from the oven(null) -> 10
-10: Add the yogurt to the korma and stir it in. Add your roasted vegetables, a large handful of chopped coriander, reserving some to garnish, 60g of cashew nuts, and the juice of a lime. Stir everything together(null) -> 11
-11: Serve the korma over the steaming hot rice, with the remaining chopped coriander scattered on top(null) -> 
+7: Start cooking the basmati rice in a separate pan according to the packet instructions(null) -> 10
+8: Add 2 teaspoons of garam masala, 1 teaspoon of chilli flakes, and 2 tablespoons of tomato purée to the frying pan. Stir everything together, then add 200 ml of water(null) -> 9
+9: Add the yogurt to the korma and stir it in. Add your roasted vegetables, a large handful of chopped coriander, reserving some to garnish, 60g of cashew nuts, and the juice of a lime. Stir everything together(null) -> 10
+10: Serve the korma over the steaming hot rice, with the remaining chopped coriander scattered on top(null) -> 
 
 
 Black Pepper Tofu
@@ -158,3 +157,24 @@ Black Pepper Tofu
 9: Add the chopped and de-seeded red chilli and 3 chopped spring onions. Stir everything, then re-add the tofu and stir it in(null) -> 10
 10: Add another tablespoon of butter, allow it to melt, then remove the wok from the heat(null) -> 11
 11: Serve the tofu on top of the rice, garnish with the remaining chopped spring onion and extra chilli(null) -> ng onion and extra chilli(null) -> 
+
+
+Roasted Pepper Mac n Cheese
+
+0: Gather a roasting tray, blender, large pot, bowl, whisk, spoon, ovenproof dish, grater, knife, chopping board, and plates(null) -> 1
+1: Preheat your oven to 180°C fan(null) -> 2,3
+2: Add your whole peppers with seeds to a roasting tray and roast in the oven(45) -> 5
+3: In a bowl, whisk 1 teaspoon of paprika and 2 tablespoons of flour with some olive oil(null) -> 4
+4: Grate the cheeses(null) -> 5
+5: Peel and remove the seeds from the roasted peppers once they’re cool(null) -> 6,7
+6: Get the macaroni on and cook it in salted boiling water(10) -> 10
+7: Add two of the roasted peppers to a blender along with 550ml of milk and a good grinding of pepper. Blitz until smooth(null) -> 8
+8: Slowly add the blended pepper mix to the bowl of olive oil, paprika and flour, whisking as you go to form a thick, red sauce(null) -> 9
+9: Add most of grated Cheddar and most of grated manchego to the sauce. Mix until smooth and melted(null) -> 11
+10: Once the macaroni is done, drain it(null) -> 11
+11: Add the cooked macaroni to the sauce and stir it in(null) -> 12
+12: Slice up your remaining roasted pepper and add that to the mix. Stir everything together(null) -> 13
+13: Spoon the mixture into an ovenproof dish and top with the remaining grated Cheddar and manchego(null) -> 14
+14: Put the dish under your preheated grill, until golden and bubbling(10) -> 15
+15: Remove from the grill, spoon into bowls, and enjoy!(null) -> 
+
