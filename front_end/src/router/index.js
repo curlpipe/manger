@@ -12,10 +12,16 @@ import GetCookingView from '@/views/GetCookingView.vue';
 import ShoppingListView from '@/views/ShoppingListView.vue';
 import SchedulePrintView from '@/views/SchedulePrintView.vue';
 import CookMealView from '@/views/CookMealView.vue';
+import HomeView from '@/views/HomeView.vue';
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
+        {
+            path: '/',
+            name: 'home',
+            component: HomeView,
+        },
         {
             path: '/pantry',
             name: 'pantry',

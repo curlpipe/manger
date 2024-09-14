@@ -4,7 +4,7 @@
 
 <template>
     <nav class="blue-bg" id="navbar">
-        <h4 class="white-fg">Manger</h4>
+        <RouterLink to="/"><h4 class="white-fg">Manger</h4></RouterLink>
         <div class="bunch">
             <RouterLink class="white-fg" to="/pantry">Pantry</RouterLink>
             <RouterLink class="white-fg" to="/cookbook">Cookbook</RouterLink>
