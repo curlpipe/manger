@@ -48,3 +48,11 @@ RouterLink {
     font-size: 12px;
     font-weight: 500;
 }
+
+.carousel {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 20px;
+    gap: 30px;
+}

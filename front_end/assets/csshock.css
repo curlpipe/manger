@@ -146,6 +146,11 @@ select {
     display: flex;
 }
 
+.bunch-no-pad {
+    display: flex;
+    gap: 50px;
+}
+
 .bunch > * {
     margin-right: var(--outer-margin);
     margin-left: var(--outer-margin);
@@ -166,8 +171,9 @@ nav {
 }
 
 @media only screen and (max-width: 567px) {
-    .bunch {
+    .bunch, .bunch-no-pad {
         flex-direction: column;
+        gap: 0px;
     }
 
     nav > .bunch {
