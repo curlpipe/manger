@@ -1,6 +1,6 @@
 <script setup>
 import ChooseMeal from '@/components/ChooseMeal.vue';
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onUpdated } from 'vue';
 import { useMealStore } from '@/stores/useMealStore.js';
 
 const mealStore = useMealStore();
@@ -14,7 +14,13 @@ const props = defineProps({
 onMounted(async () => {
     await mealStore.query();
     props.content.forEach((day, idx) => {
-        selects.value[idx] = { breakfast: false, lunch: false, brunch: false, dinner: false, snack: false };
+        selects.value.push({ breakfast: false, lunch: false, brunch: false, dinner: false, snack: false });
+    });
+});
+
+onUpdated(async () => {
+    props.content.forEach((day, idx) => {
+        selects.value.push({ breakfast: false, lunch: false, brunch: false, dinner: false, snack: false });
     });
 });
 
@@ -25,6 +31,7 @@ const addDay = () => {
 
 const deleteDay = () => {
     props.content.pop();
+    selects.value.pop();
 };
 
 const openSelection = (idx, time) => {

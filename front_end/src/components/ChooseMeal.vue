@@ -9,7 +9,6 @@ const props = defineProps({
 
 onMounted(() => {
     document.querySelector('.popup').style.height = document.querySelector('#app').offsetHeight + 'px';
-    console.log(props.meals);
 });
 
 const meal = ref(0);
@@ -34,9 +33,9 @@ const nextMeal = () => {
             @click="$emit('closePopup')"
         >X</button>
         <h4>Select your meal</h4>
-        <form v-if="type == 'schedule'" @submit.prevent="$emit('selectMeal', meals[meal].id, kind)">
-            <label for="kind">For: </label>
-            <select id="kind" name="kind" v-model="kind">
+        <form @submit.prevent="$emit('selectMeal', meals[meal].id, kind)">
+            <label v-if="type == 'schedule'" for="kind">For: </label>
+            <select v-if="type == 'schedule'" id="kind" name="kind" v-model="kind">
                 <option v-for="at in ['breakfast', 'lunch', 'brunch', 'dinner', 'snack']" :value="at">{{ at }}</option>
             </select>
             <br>
