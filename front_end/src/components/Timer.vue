@@ -1,5 +1,6 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue';
+import alarmSound from '/assets/alarm.mp3';
 
 const props = defineProps({
     id: Number,
@@ -22,6 +23,8 @@ const decrement = () => {
     if (seconds.value == 0 && minute.value == 0) {
         clearInterval(countdown);
         document.getElementById(`timer-${props.id}`).classList.add("fade-in-out");
+        let audio = new Audio(alarmSound);
+        audio.play();
     } else if (seconds.value == 0) {
         seconds.value = 59;
         minute.value -= 1;
