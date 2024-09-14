@@ -71,8 +71,7 @@ const generateList = async () => {
                 name: ingredient.name, 
                 amount: ingredient.quantity,
             }
-        })
-        .filter(i => i.amount > 0);
+        });
     list.value = allIngredients;
 
     // Evaluate the start and end date
@@ -121,7 +120,7 @@ const nextIngredient = async () => {
     <hr>
     <div v-if="list.length > 0 && !end">
         <h5>
-            {{ list[idx].name }}: what quantity do you have?
+            {{ list[idx].name }}: what quantity do you have ({{ list[idx].unit }})?
         </h5>
         <input type="number" v-model="quant">
         <div class="bunch-no-pad" style="gap: 10px;">
