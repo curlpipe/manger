@@ -71,10 +71,12 @@ p, a, input, button, label, select {
 input[type="submit"], button, select {
     font-size: 14px;
     font-weight: 300;
+    cursor: pointer;
 }
 
 a {
     color: var(--blue);
+    cursor: pointer;
 }
 
 a:hover, input:hover, button:hover {
