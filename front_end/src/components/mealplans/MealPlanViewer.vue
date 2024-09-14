@@ -14,15 +14,13 @@ const props = defineProps({
 onMounted(async () => {
     await mealStore.query();
     props.content.forEach((day, idx) => {
-        console.log(day);
         selects.value[idx] = { breakfast: false, lunch: false, brunch: false, dinner: false, snack: false };
     });
-    console.log(selects.value);
 });
 
 const addDay = () => {
-    console.log(props.content);
     props.content.push({ 'breakfast': null, 'lunch': null, 'brunch': null, 'dinner': null, 'snack': null });
+    selects.value.push({ breakfast: false, lunch: false, brunch: false, dinner: false, snack: false });
 };
 
 const deleteDay = () => {
@@ -42,7 +40,6 @@ const closeSelection = (idx, time) => {
 };
 
 const setMeal = (idx, time, meal) => {
-    console.log(idx, time, meal);
     closeSelection(idx, time);
     props.content[idx][time] = meal;
 };
