@@ -13,6 +13,7 @@ import ShoppingListView from '@/views/ShoppingListView.vue';
 import SchedulePrintView from '@/views/SchedulePrintView.vue';
 import CookMealView from '@/views/CookMealView.vue';
 import HomeView from '@/views/HomeView.vue';
+import AuditView from '@/views/AuditView.vue';
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -79,6 +80,11 @@ const router = createRouter({
             path: '/getcooking/shoppinglist',
             name: 'shopping_list',
             component: ShoppingListView,
+        },
+        {
+            path: '/getcooking/audit',
+            name: 'audit',
+            component: AuditView,
         },
         {
             path: '/getcooking/print',

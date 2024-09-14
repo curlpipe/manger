@@ -149,6 +149,8 @@ const printMe = () => {
     <p>
         Here you can generate a printable shopping list for you to take shopping.
         <br>
+        <RouterLink to="/getcooking/audit">Click here to update inventory based on shopping list</RouterLink>
+        <br>
         <br>
         1. <b>Select the number of days from today that you want to shop for <br>(e.g. 7 if you shop on the same day every week)</b>
         <br>
