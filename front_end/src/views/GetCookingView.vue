@@ -64,6 +64,21 @@ const selectMeal = async (id, kind) => {
     await getSchedule();
 };
 
+const pullupMeal = async (id, m, d, k) => {
+    d = dateUtils.decrementDate(d);
+    // Delete old position
+    await axios.delete(`/api/schedule/${id}`);
+    // Put into new position
+    const body = {
+        meal_id: m,
+        kind: k,
+        date: d,
+    };
+    await axios.post('/api/schedule', body);
+    // Refresh the schedule
+    await getSchedule();
+};
+
 const deferMeal = async (id, m, d, k) => {
     d = dateUtils.incrementDate(d);
     // Delete old position
@@ -74,7 +89,6 @@ const deferMeal = async (id, m, d, k) => {
         kind: k,
         date: d,
     };
-    console.log(body);
     await axios.post('/api/schedule', body);
     // Refresh the schedule
     await getSchedule();
@@ -148,6 +162,7 @@ const activatePlan = async (id) => {
                     <a href="" style="text-decoration: none;">{{ meal.meal.name }}</a>
                 </RouterLink>
                 <a @click="removeMeal(meal.id)" style="margin-left: 10px;" class="red-fg">X</a>
+                <a @click="pullupMeal(meal.id, meal.meal_id, date, meal.kind)" style="margin-left: 10px;" class="orange-fg">&#8593;</a>
                 <a @click="deferMeal(meal.id, meal.meal_id, date, meal.kind)" style="margin-left: 10px;" class="orange-fg">&#8595;</a>
             </div>
             <br>

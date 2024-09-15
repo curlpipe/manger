@@ -63,6 +63,21 @@ function getTodayDate() {
     return `${year}-${month}-${day}`;
 }
 
+function decrementDate(dateString) {
+    // Parse the date string into a Date object
+    const date = new Date(dateString);
+
+    // Decrement the date by one day
+    date.setDate(date.getDate() - 1);
+
+    // Format the date back into YYYY-MM-DD
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+    const day = String(date.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+}
+
 function incrementDate(dateString) {
     // Parse the date string into a Date object
     const date = new Date(dateString);
@@ -78,4 +93,4 @@ function incrementDate(dateString) {
     return `${year}-${month}-${day}`;
 }
 
-export default { formatDate, getDateRange, getTodayDate, incrementDate };
+export default { formatDate, getDateRange, getTodayDate, incrementDate, decrementDate };
