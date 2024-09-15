@@ -1,5 +1,6 @@
 <script setup>
 import Timer from '@/components/Timer.vue';
+import MealFlow from '@/components/cookbook/MealFlow.vue';
 import { ref, reactive, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
@@ -103,6 +104,8 @@ const begin = () => {
         <ul>
             <li v-for="ingredient in meal.ingredients">{{ ingredient.name }} {{ ingredient.MealIngredients.amount }}{{ ingredient.unit }}</li>
         </ul>
+        <p>Instructions:</p>
+        <MealFlow :instructions="meal.instructions" />
         <button @click="begin">Start</button>
     </div>
 </template>
