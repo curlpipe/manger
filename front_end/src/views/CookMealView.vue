@@ -11,6 +11,7 @@ const props = defineProps({
 
 const router = useRouter();
 
+const deducted = ref(false);
 const active = ref(false);
 const meal = ref({});
 const completed = [];
@@ -62,6 +63,17 @@ const done = (idx) => {
     completed.push(idx);
 };
 
+const deduct = async () => {
+    meal.value.ingredients.forEach(async i => {
+        const existing = i.quantity;
+        const deduct_this = i.MealIngredients.amount;
+        const deduct_from = i.id;
+        const new_amount = Math.max(0, existing - deduct_this);
+        await axios.put(`/api/ingredient/${i.id}`, { quantity: new_amount });
+    });
+    deducted.value = true;
+};
+
 const leave = () => {
     document.getElementById('navbar').style.display = 'flex';
     router.push('/getcooking');
@@ -80,6 +92,8 @@ const begin = () => {
     <div v-if="active" class="bunch" style="width: 100%; height: calc(100vh - 90px); margin-top: 20px; justify-content: center; align-items: center;">
         <div v-if="current.filter(i => i[0] != null).length == 0" style="display: flex; flex-direction: column; align-items: center;">
             <p style="text-align: center; color: gray;">Congratulations!<br>You have completed this recipe</p>
+            <button v-if="!deducted" @click="deduct">Deduct used ingredients from inventory</button>
+            <p v-else style="color: grey;">&#10003; Ingredients deducted from inventory</p>
             <button @click="leave">Return to schedule</button>
         </div>
         <div class="bunch steps" style="margin: 0 !important;" v-for="[step, order] in current.sort((a, b) => a[1] - b[1])">
@@ -105,7 +119,7 @@ const begin = () => {
             <li v-for="ingredient in meal.ingredients">{{ ingredient.name }} {{ ingredient.MealIngredients.amount }}{{ ingredient.unit }}</li>
         </ul>
         <p>Instructions:</p>
-        <MealFlow :instructions="meal.instructions" />
+        <MealFlow v-if="meal.instructions != null" :instructions="meal.instructions" />
         <button @click="begin">Start</button>
     </div>
 </template>
