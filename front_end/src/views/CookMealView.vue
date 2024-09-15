@@ -76,12 +76,12 @@ const begin = () => {
         <h4 v-if="active">Recipe - {{ meal.name }}</h4>
         <button class="red-bg" @click="leave">Exit</button>
     </div>
-    <div v-if="active" class="bunch" style="width: 100%; height: calc(100vh - 90px); margin-top: 20px; justify-content: center;">
+    <div v-if="active" class="bunch" style="width: 100%; height: calc(100vh - 90px); margin-top: 20px; justify-content: center; align-items: center;">
         <div v-if="current.filter(i => i[0] != null).length == 0" style="display: flex; flex-direction: column; align-items: center;">
             <p style="text-align: center; color: gray;">Congratulations!<br>You have completed this recipe</p>
             <button @click="leave">Return to schedule</button>
         </div>
-        <div class="bunch" style="margin: 0 !important;" v-for="[step, order] in current.sort((a, b) => a[1] - b[1])">
+        <div class="bunch steps" style="margin: 0 !important;" v-for="[step, order] in current.sort((a, b) => a[1] - b[1])">
             <div v-if="step != null" style="width: 300px; display: flex; flex-direction: column; align-items: center;">
                 <h5 style="text-align: center;">{{ meal.instructions[step].command }}</h5>
                 <p v-if="meal.instructions[step].timer != null">(for {{ meal.instructions[step].timer }} mins)</p>
