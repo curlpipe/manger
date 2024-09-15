@@ -48,7 +48,6 @@ onMounted(async () => {
             instructions_json.value += `${idx}: ${i.command}(${i.timer}) -> ${i.next}\n`;
         });
         mealFlowChange();
-
     } catch (error) {
         console.error(error);
     }

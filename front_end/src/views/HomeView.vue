@@ -20,13 +20,8 @@ onMounted(async () => {
 
 const importData = async () => {
     const data = JSON.parse(backup.value);
+    await axios.post('/api/import', { data });
     console.log(data);
-    // Clear the databases
-    // Upload ingredients
-    // Upload meals
-    // Attach ingredients to meals
-    // Upload meal plans
-    // Upload schedule
 };
 
 const exportData = async () => {

@@ -8,6 +8,7 @@ const ingredients = require('./ingredient_routes.js');
 const meals = require('./meal_routes.js');
 const mealplans = require('./meal_plan_routes.js');
 const schedule = require('./schedule_routes.js');
+const importer = require('./importer.js');
 
 // Set up express server
 const app = express();
@@ -39,6 +40,8 @@ app.get('/schedule', schedule.getAll);
 app.post('/schedule', schedule.post);
 app.put('/schedule/:id', schedule.put);
 app.delete('/schedule/:id', schedule.delete);
+
+app.post('/import', importer.importData)
 
 // Run the application
 app.listen(port, () => {
