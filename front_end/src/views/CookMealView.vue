@@ -89,7 +89,7 @@ const begin = () => {
         <h4 v-if="active">Recipe - {{ meal.name }}</h4>
         <button class="red-bg" @click="leave">Exit</button>
     </div>
-    <div v-if="active" class="bunch" style="width: 100%; height: calc(100vh - 90px); margin-top: 20px; justify-content: center; align-items: center;">
+    <div v-if="active" class="bunch" style="width: 100%; height: calc(100% - 90px); margin-top: 20px; justify-content: center; align-items: center;">
         <div v-if="current.filter(i => i[0] != null).length == 0" style="display: flex; flex-direction: column; align-items: center;">
             <p style="text-align: center; color: gray;">Congratulations!<br>You have completed this recipe</p>
             <button v-if="!deducted" @click="deduct">Deduct used ingredients from inventory</button>
