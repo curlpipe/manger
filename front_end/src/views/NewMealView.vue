@@ -13,7 +13,7 @@ const ingredientStore = useIngredientStore();
 
 onMounted(async () => {
     // Load inventory from database
-    ingredientStore.query();
+    await ingredientStore.query();
 });
 
 const name = ref('');
@@ -34,8 +34,11 @@ var ingredients = reactive([]);
 const notes = ref('');
 const rating = ref(null);
 
-const ingred_id = ref(1);
+const ingred_id = ref((ingredientStore.getIngredients[0] ?? { id: -1 }).id);
 const ingred_amount = ref(0);
+
+const new_ingredient_name = ref('');
+const new_ingredient_unit = ref('unit');
 
 var instructions_json = ref('');
 instructions.value.forEach((i, idx) => {
@@ -81,7 +84,26 @@ const mealFlowChange = async () => {
     });
 };
 
-const addIngredientToMeal = () => {
+const addIngredientToMeal = async () => {
+    // Add ingredient if necessary
+    if (ingred_id.value == -1) {
+        // Gather form data
+        const body = {
+            name: new_ingredient_name.value,
+            quantity: 0,
+            unit: new_ingredient_unit.value,
+        };
+        // Update database
+        let add_response = null;
+        try {
+            add_response = await axios.post('/api/ingredient', body);
+        } catch (error) {
+            console.error('Failed to create new ingredient');
+        }
+        // Refresh the ingredient listing and update the selection box
+        await ingredientStore.query();
+        ingred_id.value = add_response.data.id;
+    }
     // Add ingredient to the meal
     const info = ingredientStore.getIngredients.find(i => i.id == ingred_id.value);
     ingredients.push({ id: ingred_id.value, name: info.name, amount: ingred_amount.value, unit: info.unit });
@@ -125,10 +147,30 @@ const removeIngredientFromMeal = (id) => {
                 <IngredientOverview :ingredients="ingredients" @delete-ingredient="removeIngredientFromMeal"/>
                 <br>
                 <label for="ingred">Ingredient to add: </label>
+                <br>
                 <select id="ingred" name="ingred" v-model="ingred_id">
+                    <option :value="-1">New Ingredient</option>
                     <option v-for="ingredient in ingredientStore.getIngredients" :value="ingredient.id">{{ ingredient.name }} ({{ ingredient.unit }})</option>
                 </select>
-                <br>
+                <div v-if="ingred_id == -1">
+                    <label for="nin">Name of new ingredient: </label>
+                    <input type="text" id="nin" name="nin" v-model="new_ingredient_name">
+                    <br>
+                    <label for="niu">Unit of new ingredient: </label>
+                    <select id="niu" name="niu" v-model="new_ingredient_unit">
+                        <option value="ml">millilitres</option>
+                        <option value="l">litres</option>
+                        <option value="pt">pints</option>
+                        <option value="oz">ounces</option>
+                        <option value="g">grams</option>
+                        <option value="kg">kilograms</option>
+                        <option value="unit">items</option>
+                        <option value="tsp">teaspoons</option>
+                        <option value="tbsp">tablespoons</option>
+                        <option value="pinch">pinches</option>
+                    </select>
+                </div>
+                <br v-else>
                 <label for="amount">Amount used: </label>
                 <input type="number" id="amount" name="amount" v-model="ingred_amount">
                 <br>

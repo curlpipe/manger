@@ -31,7 +31,7 @@ module.exports.post = async (request, response) => {
 
     // Attempt to add to the database, and send the appropriate response
     await Ingredient.create({ name, quantity, unit })
-        .then(result => response.status(200).json({ message: 'Success' }))
+        .then(result => response.status(200).json({ message: 'Success', id: result.id }))
         .catch(error => response.status(500).json({ message: 'Failed to add to database, please check your values' }))
 };
 
