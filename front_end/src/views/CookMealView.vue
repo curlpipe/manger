@@ -4,6 +4,7 @@ import MealFlow from '@/components/cookbook/MealFlow.vue';
 import { ref, reactive, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
+import Storage from '@/utils/storageUtils.js';
 
 const props = defineProps({
     id: String,
@@ -11,11 +12,13 @@ const props = defineProps({
 
 const router = useRouter();
 
+const flowStorage = new Storage('localStorage');
+
 const deducted = ref(false);
 const active = ref(false);
 const meal = ref({});
-const completed = [];
-var current = reactive([]);
+var completed = [];
+var current = reactive(flowStorage.hasItem('flowCurrent') ? flowStorage.getItem('flowCurrent') : [[0, 0]]);
 
 onMounted(async () => {
     const response = await axios.get(`/api/meal/${props.id}`);
@@ -23,7 +26,11 @@ onMounted(async () => {
     meal.value.instructions.forEach((i, idx) => {
         i.id = idx;
     });
-    current.push([0, 0]);
+    // Find the initial values (check if we're already following a meal flow)
+    completed = flowStorage.hasItem('flowCompleted') ? flowStorage.getItem('flowCompleted') : [] ;
+    if (flowStorage.hasItem('flowCompleted') && flowStorage.hasItem('flowCurrent')) {
+        active.value = true;
+    }
     // Hide navbar
     document.getElementById('navbar').style.display = 'none';
 });
@@ -61,6 +68,10 @@ const done = (idx) => {
 
     // Update completed log
     completed.push(idx);
+
+    // Cache the state of the meal flow
+    flowStorage.setItem('flowCurrent', current);
+    flowStorage.setItem('flowCompleted', completed);
 };
 
 const deduct = async () => {
@@ -75,6 +86,8 @@ const deduct = async () => {
 };
 
 const leave = () => {
+    flowStorage.removeItem('flowCurrent');
+    flowStorage.removeItem('flowCompleted');
     document.getElementById('navbar').style.display = 'flex';
     router.push('/getcooking');
 };
