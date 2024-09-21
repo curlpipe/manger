@@ -94,6 +94,10 @@ const leave = () => {
 
 const begin = () => {
     active.value = true;
+
+    // Cache the state of the meal flow
+    flowStorage.setItem('flowCurrent', current);
+    flowStorage.setItem('flowCompleted', completed);
 };
 </script>
 
