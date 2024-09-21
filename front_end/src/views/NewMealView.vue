@@ -6,35 +6,64 @@ import { useIngredientStore } from '@/stores/useIngredientStore.js';
 import { useRouter } from 'vue-router';
 import { ref, reactive, onMounted } from 'vue';
 import axios from 'axios';
+import Storage from '@/utils/storageUtils.js';
 
 const router = useRouter();
 const mealStore = useMealStore();
 const ingredientStore = useIngredientStore();
 
+const formStorage = new Storage('localStorage');
+
 onMounted(async () => {
     // Load inventory from database
     await ingredientStore.query();
+    ingred_id.value = (ingredientStore.getIngredients[0] ?? { id: ingred_id.value }).id;
 });
 
-const name = ref('');
-const time = ref(0);
-const difficulty = ref('easy');
-var instructions = ref([
-    {command: "Gather ingredients", timer: null, next: [1]}, // step 0
-    {command: "Gather utensils", timer: null, next: [2, 5]}, // step 1
-    {command: "Boil the kettle", timer: null, next: [3]}, // step 2
-    {command: "Add noodles and water to the pot", timer: null, next: [4]}, // step 3
-    {command: "Boil the noodles for 8 mins", timer: 8, next: [7]}, // step 4
-    {command: "Chop up the vegetables", timer: null, next: [6]}, // step 5
-    {command: "Fry the oil and veg for 5 minutes", timer: 5, next: [7]}, // step 6
-    {command: "Add the noodles, fry for 3 minutes", timer: 3, next: [8]}, // step 7
-    {command: "Serve", timer: null, next: []}, // step 8
-]);
-var ingredients = reactive([]);
-const notes = ref('');
-const rating = ref(null);
+const getCache = () => {
+    if (formStorage.hasItem('newMealForm')) {
+        let cached = formStorage.getItem('newMealForm');
+        return {
+            name: cached.name,
+            time: cached.time,
+            difficulty: cached.difficulty,
+            instructions: cached.instructions,
+            ingredients: cached.ingredients,
+            notes: cached.notes,
+            rating: cached.rating,
+        };
+    } else {
+        return {
+            name: '',
+            time: 0,
+            difficulty: 'easy',
+            instructions: [
+                {command: "Gather ingredients", timer: null, next: [1]}, // step 0
+                {command: "Gather utensils", timer: null, next: [2, 5]}, // step 1
+                {command: "Boil the kettle", timer: null, next: [3]}, // step 2
+                {command: "Add noodles and water to the pot", timer: null, next: [4]}, // step 3
+                {command: "Boil the noodles for 8 mins", timer: 8, next: [7]}, // step 4
+                {command: "Chop up the vegetables", timer: null, next: [6]}, // step 5
+                {command: "Fry the oil and veg for 5 minutes", timer: 5, next: [7]}, // step 6
+                {command: "Add the noodles, fry for 3 minutes", timer: 3, next: [8]}, // step 7
+                {command: "Serve", timer: null, next: []}, // step 8
+            ],
+            ingredients: [],
+            notes: '',
+            rating: null,
+        };
+    }
+};
 
-const ingred_id = ref((ingredientStore.getIngredients[0] ?? { id: -1 }).id);
+const name = ref(getCache().name);
+const time = ref(getCache().time);
+const difficulty = ref(getCache().difficulty);
+var instructions = ref(getCache().instructions);
+var ingredients = reactive(getCache().ingredients);
+const notes = ref(getCache().notes);
+const rating = ref(getCache().rating);
+
+var ingred_id = ref((ingredientStore.getIngredients[0] ?? { id: -1 }).id);
 const ingred_amount = ref(0);
 
 const new_ingredient_name = ref('');
@@ -45,7 +74,7 @@ instructions.value.forEach((i, idx) => {
     instructions_json.value += `${idx}: ${i.command}(${i.timer}) -> ${i.next}\n`;
 });
 
-const createMeal = () => {
+const createMeal = async () => {
     // Gather form data
     const body = {
         name: name.value,
@@ -58,7 +87,15 @@ const createMeal = () => {
     };
     // Update database
     try {
-        const add_response = axios.post('/api/meal', body);
+        clearInterval(cacher);
+        const add_response = await axios.post('/api/meal', body);
+        // Clear the cache if confirmed to have saved in the database
+        if (add_response.status == 200) {
+            formStorage.removeItem('newMealForm');
+            if (formStorage.hasItem('newMealForm')) {
+                console.log("WHY NOT DELETING!!!");
+            }
+        }
         // Return the user to the list of meals
         router.push('/cookbook');
     } catch (error) {
@@ -113,6 +150,22 @@ const removeIngredientFromMeal = (id) => {
     const idx = ingredients.findIndex(i => i.id == id);
     ingredients.splice(idx, 1);
 };
+
+const cacheFormData = () => {
+    console.log("I hope you like pain");
+    let data = {
+        name: name.value,
+        time: time.value,
+        difficulty: difficulty.value,
+        instructions: instructions.value,
+        ingredients: ingredients,
+        notes: notes.value,
+        rating: rating.value,
+    };
+    formStorage.setItem('newMealForm', data);
+};
+
+const cacher = setInterval(cacheFormData, 5000);
 
 </script>
 
