@@ -75,7 +75,10 @@ const applyEdit = async () => {
     }
 };
 
-const mealFlowChange = () => {
+const sleep = async (ms) => new Promise((callback) => setTimeout(callback, ms));
+
+const mealFlowChange = async () => {
+    await sleep(20);
     instructions.value = [];
     instructions_json.value.split('\n').forEach(line => {
         if (line.length > 0) {
@@ -144,16 +147,16 @@ const removeIngredientFromMeal = (id) => {
             <br>
             <textarea rows="5" cols="48" id="notes" name="notes" v-model="notes"></textarea>
             <br>
+            <form @submit.prevent="mealFlowChange">
+                <div id="instructions"></div>
+                <MealFlow :instructions="instructions" />
+                <br>
+                <textarea v-model="instructions_json" cols="48" rows="10"></textarea>
+                <br>
+                <input type="submit" value="Update Meal Flow"></input>
+                <br>
+            </form>
             <input type="submit" value="Apply Edits">
-        </form>
-        <form @submit.prevent="mealFlowChange">
-            <div id="instructions"></div>
-            <MealFlow :instructions="instructions" />
-            <br>
-            <textarea v-model="instructions_json" cols="48" rows="10"></textarea>
-            <br>
-            <input type="submit" value="Update Meal Flow"></input>
-            <br>
         </form>
     </div>
 </template>
