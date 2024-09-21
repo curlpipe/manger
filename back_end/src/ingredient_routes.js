@@ -2,7 +2,7 @@ const { Ingredient } = require('../models/index.js');
 
 module.exports.getAll = async (request, response) => {
     // Get all models
-    const ingredients = await Ingredient.findAll({ order: [['id', 'ASC']] });
+    const ingredients = await Ingredient.findAll({ order: [['name', 'ASC']] });
 
     // Send the response
     response.status(200).json(ingredients)
