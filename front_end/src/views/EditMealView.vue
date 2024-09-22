@@ -1,10 +1,11 @@
 <script setup>
 import MealFlow from '@/components/cookbook/MealFlow.vue';
+import MealFlowEdit from '@/components/cookbook/MealFlowEdit.vue';
 import IngredientOverview from '@/components/cookbook/IngredientOverview.vue';
 import { useMealStore } from '@/stores/useMealStore.js';
 import { useIngredientStore } from '@/stores/useIngredientStore.js';
 import { useRouter } from 'vue-router';
-import { ref, reactive, onMounted } from 'vue';
+import { ref, reactive, onMounted, onBeforeUnmount } from 'vue';
 import axios from 'axios';
 import Storage from '@/utils/storageUtils.js';
 
@@ -61,6 +62,8 @@ const new_ingredient_unit = ref('unit');
 
 var instructions_json = ref('');
 
+var cacher = null;
+
 onMounted(async () => {
     try {
         await ingredientStore.query();
@@ -78,12 +81,14 @@ onMounted(async () => {
         instructions.value.forEach((i, idx) => {
             instructions_json.value += `${idx}: ${i.command}(${i.timer}) -> ${i.next}\n`;
         });
-        mealFlowChange();
         ingred_id.value = (ingredientStore.getIngredients[0] ?? { id: -1 }).id;
+        cacher = setInterval(cacheFormData, 5000);
     } catch (error) {
         console.error(error);
     }
 });
+
+onBeforeUnmount(() => clearInterval(cacher));
 
 const applyEdit = async () => {
     // Gather form data
@@ -113,22 +118,6 @@ const applyEdit = async () => {
 };
 
 const sleep = async (ms) => new Promise((callback) => setTimeout(callback, ms));
-
-const mealFlowChange = async () => {
-    await sleep(20);
-    instructions.value = [];
-    instructions_json.value.split('\n').forEach(line => {
-        if (line.length > 0) {
-            line = line.split(': ')[1];
-            let [command_part, next] = line.split(' -> ');
-            let [command, timer] = command_part.split('(');
-            timer = timer.slice(0, -1);
-            next = next.split(',').filter(i => i != '').map(i => parseInt(i));
-            timer = timer == 'null' ? null : parseInt(timer);
-            instructions.value.push({ command, timer, next });
-        }
-    });
-};
 
 const addIngredientToMeal = async () => {
     // Add ingredient if necessary
@@ -172,7 +161,13 @@ const cacheFormData = () => {
     formStorage.setItem('editMealForm' + props.id, data);
 };
 
-const cacher = setInterval(cacheFormData, 5000);
+const copyInstructions = () => {
+    return JSON.parse(JSON.stringify(instructions.value));
+};
+
+const updateFlow = (update) => {
+    instructions.value = update;
+};
 
 </script>
 
@@ -236,16 +231,15 @@ const cacher = setInterval(cacheFormData, 5000);
             <label for="notes">Notes: </label>
             <br>
             <textarea rows="5" cols="48" id="notes" name="notes" v-model="notes"></textarea>
+
             <br>
-            <form @submit.prevent="mealFlowChange">
-                <div id="instructions"></div>
-                <MealFlow :instructions="instructions" />
-                <br>
-                <textarea v-model="instructions_json" cols="48" rows="10"></textarea>
-                <br>
-                <input type="submit" value="Update Meal Flow"></input>
-                <br>
-            </form>
+            <br>
+            <!-- Form  to modify and change the flow of the meal -->
+            <div class="meal-edit">
+                <MealFlowEdit :instructions="copyInstructions()" @update-flow="updateFlow" />
+                <MealFlow :instructions="instructions"/>
+            </div>
+            <br>
             <input type="submit" value="Apply Edits">
         </form>
     </div>

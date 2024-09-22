@@ -1,5 +1,5 @@
 <script setup>
-import { onUpdated } from 'vue';
+import { onMounted, onUpdated } from 'vue';
 import mermaid from 'mermaid';
 
 mermaid.initialize({ 
@@ -11,8 +11,10 @@ const props = defineProps({
     instructions: Object,
 });
 
+var instructions_mermaid = null;
+
 const generateSVG = async () => {
-    var instructions_mermaid = 'flowchart TD\n';
+    instructions_mermaid = 'flowchart TD\n';
 
     props.instructions.forEach((instruction, ind) => {
         let timer_text = instruction.timer == null ? '' : ` for ${instruction.timer} minutes`;
@@ -26,14 +28,16 @@ const generateSVG = async () => {
     document.getElementById('instructions').innerHTML = svgCode.svg;
 };
 
-onUpdated(() => {
-    generateSVG();
+onMounted(async () => {
+    await generateSVG();
 });
 
-generateSVG();
+onUpdated(async () => {
+    await generateSVG();
+});
 
 </script>
 
 <template>
-    <div id="instructions"></div>
+    <div style="min-width: 500px;" id="instructions"></div>
 </template>

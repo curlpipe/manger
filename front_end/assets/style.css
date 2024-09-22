@@ -57,6 +57,16 @@ RouterLink {
     gap: 30px;
 }
 
+.meal-edit {
+    display: flex;
+    flex-direction: row;
+}
+
+@media only screen and (max-width: 1100px) {
+    .meal-edit {
+        flex-direction: column;
+    }
+}
 
 @media only screen and (max-width: 567px) {
     .steps > * {
@@ -65,4 +75,31 @@ RouterLink {
         margin-top: 5px;
         margin-bottom: 5px;
     }
+}
+
+table {
+    width: 100%;              /* Full-width table */
+    border-collapse: collapse; /* Merge borders into a single border */
+}
+
+th, td {
+    padding: 9px;              /* Add some padding */
+    border: 1px solid grey;     /* Light border between cells */
+    text-align: left;           /* Align text to the left */
+}
+
+thead {
+    background-color: #f4f4f4;  /* Light background color for header */
+}
+
+tr:hover {
+    background-color: #f1f1f1;  /* Row highlight on hover */
+}
+
+.softbunch {
+    display: flex;
+}
+
+.softbunch > * {
+    padding-right: 5px;
 }

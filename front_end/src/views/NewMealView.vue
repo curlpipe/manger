@@ -1,10 +1,11 @@
 <script setup>
 import MealFlow from '@/components/cookbook/MealFlow.vue';
+import MealFlowEdit from '@/components/cookbook/MealFlowEdit.vue';
 import IngredientOverview from '@/components/cookbook/IngredientOverview.vue';
 import { useMealStore } from '@/stores/useMealStore.js';
 import { useIngredientStore } from '@/stores/useIngredientStore.js';
 import { useRouter } from 'vue-router';
-import { ref, reactive, onMounted } from 'vue';
+import { ref, reactive, onMounted, onBeforeUnmount } from 'vue';
 import axios from 'axios';
 import Storage from '@/utils/storageUtils.js';
 
@@ -14,11 +15,23 @@ const ingredientStore = useIngredientStore();
 
 const formStorage = new Storage('localStorage');
 
+var cacher = null;
+
 onMounted(async () => {
     // Load inventory from database
     await ingredientStore.query();
     ingred_id.value = (ingredientStore.getIngredients[0] ?? { id: ingred_id.value }).id;
+    name.value = getCache().name;
+    time.value = getCache().time;
+    difficulty.value = getCache().difficulty;
+    instructions.value = getCache().instructions;
+    ingredients.value = getCache().ingredients;
+    notes.value = getCache().notes;
+    rating.value = getCache().rating;
+    cacher = setInterval(cacheFormData, 5000);
 });
+
+onBeforeUnmount(() => clearInterval(cacher));
 
 const getCache = () => {
     if (formStorage.hasItem('newMealForm')) {
@@ -55,24 +68,19 @@ const getCache = () => {
     }
 };
 
-const name = ref(getCache().name);
-const time = ref(getCache().time);
-const difficulty = ref(getCache().difficulty);
-var instructions = ref(getCache().instructions);
-var ingredients = reactive(getCache().ingredients);
-const notes = ref(getCache().notes);
-const rating = ref(getCache().rating);
+var name = ref('');
+var time = ref(0);
+var difficulty = ref('easy');
+var instructions = ref([]);
+var ingredients = ref([]);
+var notes = ref('');
+var rating = ref('neutral');
 
 var ingred_id = ref((ingredientStore.getIngredients[0] ?? { id: -1 }).id);
 const ingred_amount = ref(0);
 
 const new_ingredient_name = ref('');
 const new_ingredient_unit = ref('unit');
-
-var instructions_json = ref('');
-instructions.value.forEach((i, idx) => {
-    instructions_json.value += `${idx}: ${i.command}(${i.timer}) -> ${i.next}\n`;
-});
 
 const createMeal = async () => {
     // Gather form data
@@ -81,7 +89,7 @@ const createMeal = async () => {
         time: time.value,
         difficulty: difficulty.value,
         instructions: instructions.value,
-        ingredients: ingredients,
+        ingredients: ingredients.value,
         notes: notes.value,
         rating: rating.value,
     };
@@ -101,22 +109,6 @@ const createMeal = async () => {
 };
 
 const sleep = async (ms) => new Promise((callback) => setTimeout(callback, ms));
-
-const mealFlowChange = async () => {
-    await sleep(20);
-    instructions.value = [];
-    instructions_json.value.split('\n').forEach(line => {
-        if (line.length > 0) {
-            line = line.split(': ')[1];
-            let [command_part, next] = line.split(' -> ');
-            let [command, timer] = command_part.split('(');
-            timer = timer.slice(0, -1);
-            next = next.split(',').filter(i => i != '').map(i => parseInt(i));
-            timer = timer == 'null' ? null : parseInt(timer);
-            instructions.value.push({ command, timer, next });
-        }
-    });
-};
 
 const addIngredientToMeal = async () => {
     // Add ingredient if necessary
@@ -140,12 +132,12 @@ const addIngredientToMeal = async () => {
     }
     // Add ingredient to the meal
     const info = ingredientStore.getIngredients.find(i => i.id == ingred_id.value);
-    ingredients.push({ id: ingred_id.value, name: info.name, amount: ingred_amount.value, unit: info.unit });
+    ingredients.value.push({ id: ingred_id.value, name: info.name, amount: ingred_amount.value, unit: info.unit });
 };
 
 const removeIngredientFromMeal = (id) => {
-    const idx = ingredients.findIndex(i => i.id == id);
-    ingredients.splice(idx, 1);
+    const idx = ingredients.value.findIndex(i => i.id == id);
+    ingredients.value.splice(idx, 1);
 };
 
 const cacheFormData = () => {
@@ -154,14 +146,20 @@ const cacheFormData = () => {
         time: time.value,
         difficulty: difficulty.value,
         instructions: instructions.value,
-        ingredients: ingredients,
+        ingredients: ingredients.value,
         notes: notes.value,
         rating: rating.value,
     };
     formStorage.setItem('newMealForm', data);
 };
 
-const cacher = setInterval(cacheFormData, 5000);
+const copyInstructions = () => {
+    return JSON.parse(JSON.stringify(instructions.value));
+};
+
+const updateFlow = (update) => {
+    instructions.value = update;
+};
 
 </script>
 
@@ -231,15 +229,11 @@ const cacher = setInterval(cacheFormData, 5000);
             <br>
             <br>
             <!-- Form  to modify and change the flow of the meal -->
-            <form @submit.prevent="mealFlowChange">
-                <div id="instructions"></div>
-                <MealFlow :instructions="instructions" />
-                <br>
-                <textarea v-model="instructions_json" cols="48" rows="10"></textarea>
-                <br>
-                <input type="submit" value="Update Meal Flow"></input>
-                <br>
-            </form>
+            <div class="meal-edit">
+                <MealFlowEdit :instructions="copyInstructions()" @update-flow="updateFlow" />
+                <MealFlow :instructions="instructions"/>
+            </div>
+            <br>
             <input type="submit" value="Create New Meal">
         </form>
     </div>
