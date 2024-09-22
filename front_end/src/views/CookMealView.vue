@@ -17,8 +17,9 @@ const flowStorage = new Storage('localStorage');
 const deducted = ref(false);
 const active = ref(false);
 const meal = ref({});
+var flowHistory = [];
 var completed = [];
-var current = reactive(flowStorage.hasItem('flowCurrent') ? flowStorage.getItem('flowCurrent') : [[0, 0]]);
+var current = ref(flowStorage.hasItem('flowCurrent') ? flowStorage.getItem('flowCurrent') : [0]);
 
 onMounted(async () => {
     const response = await axios.get(`/api/meal/${props.id}`);
@@ -36,7 +37,8 @@ onMounted(async () => {
 });
 
 const done = (idx) => {
-    const replaceIdx = current.findIndex(id => idx == id[0]);
+    flowHistory.push({ current: [...current.value], completed: [...completed] });
+    const replaceIdx = current.value.findIndex(id => idx == id);
     
     // Find the next state
     const next = meal.value.instructions[idx].next;
@@ -53,24 +55,24 @@ const done = (idx) => {
         // Remove the done step, and push on the subsequent step(s)
         let toAdd = [];
         next.forEach(step => {
-            if (!(current.includes(step) || toAdd.includes(step))) {
+            if (!(current.value.includes(step) || toAdd.includes(step))) {
                 toAdd.push(step);
             }
         });
         toAdd.forEach(step => {
-            current.push([step, step]);
+            current.value.push(step);
         });
-        current[replaceIdx][0] = null;
+        current.value[replaceIdx] = null;
     } else {
         // Still waiting on other parents, remove and come back later
-        current[replaceIdx][0] = null;
+        current.value[replaceIdx] = null;
     }
 
     // Update completed log
     completed.push(idx);
 
     // Cache the state of the meal flow
-    flowStorage.setItem('flowCurrent', current);
+    flowStorage.setItem('flowCurrent', current.value);
     flowStorage.setItem('flowCompleted', completed);
 };
 
@@ -92,12 +94,23 @@ const leave = () => {
     router.push('/getcooking');
 };
 
+const back = () => {
+    let newState = flowHistory.pop();
+    if (newState != null) {
+        current.value = newState.current;
+        completed = newState.completed;
+        flowStorage.setItem('flowCurrent', current.value);
+        flowStorage.setItem('flowCompleted', completed);
+    }
+};
+
 const begin = () => {
     active.value = true;
 
     // Cache the state of the meal flow
-    flowStorage.setItem('flowCurrent', current);
+    flowStorage.setItem('flowCurrent', current.value);
     flowStorage.setItem('flowCompleted', completed);
+    flowHistory.push({ current: [...current.value], completed: [...completed] });
 };
 </script>
 
@@ -105,15 +118,16 @@ const begin = () => {
     <div class="bunch">
         <h4 v-if="active">Recipe - {{ meal.name }}</h4>
         <button class="red-bg" @click="leave">Exit</button>
+        <button v-if="active" class="blue-bg" @click="back">Back</button>
     </div>
     <div v-if="active" class="bunch" style="width: 100%; height: calc(100% - 90px); margin-top: 20px; justify-content: center; align-items: center;">
-        <div v-if="current.filter(i => i[0] != null).length == 0" style="display: flex; flex-direction: column; align-items: center;">
+        <div v-if="current.filter(i => i != null).length == 0" style="display: flex; flex-direction: column; align-items: center;">
             <p style="text-align: center; color: gray;">Congratulations!<br>You have completed this recipe</p>
             <button v-if="!deducted" @click="deduct">Deduct used ingredients from inventory</button>
             <p v-else style="color: grey;">&#10003; Ingredients deducted from inventory</p>
             <button @click="leave">Return to schedule</button>
         </div>
-        <div class="bunch steps" style="margin: 0 !important;" v-for="[step, order] in current.sort((a, b) => a[1] - b[1])">
+        <div class="bunch steps" style="margin: 0 !important;" v-for="step in current.sort()">
             <div v-if="step != null" style="width: 300px; display: flex; flex-direction: column; align-items: center;">
                 <h5 style="text-align: center;">{{ meal.instructions[step].command }}</h5>
                 <p v-if="meal.instructions[step].timer != null">(for {{ meal.instructions[step].timer }} mins)</p>
