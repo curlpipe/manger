@@ -17,7 +17,7 @@ const flowStorage = new Storage('localStorage');
 const deducted = ref(false);
 const active = ref(false);
 const meal = ref({});
-var flowHistory = [];
+var flowHistory = flowStorage.hasItem('flowHistory') ? flowStorage.getItem('flowHistory') : [];
 var completed = [];
 var current = ref(flowStorage.hasItem('flowCurrent') ? flowStorage.getItem('flowCurrent') : [0]);
 
@@ -74,6 +74,7 @@ const done = (idx) => {
     // Cache the state of the meal flow
     flowStorage.setItem('flowCurrent', current.value);
     flowStorage.setItem('flowCompleted', completed);
+    flowStorage.setItem('flowHistory', flowHistory);
 };
 
 const deduct = async () => {
@@ -90,6 +91,7 @@ const deduct = async () => {
 const leave = () => {
     flowStorage.removeItem('flowCurrent');
     flowStorage.removeItem('flowCompleted');
+    flowStorage.removeItem('flowHistory');
     document.getElementById('navbar').style.display = 'flex';
     router.push('/getcooking');
 };
@@ -106,11 +108,12 @@ const back = () => {
 
 const begin = () => {
     active.value = true;
+    flowHistory.push({ current: [...current.value], completed: [...completed] });
 
     // Cache the state of the meal flow
     flowStorage.setItem('flowCurrent', current.value);
     flowStorage.setItem('flowCompleted', completed);
-    flowHistory.push({ current: [...current.value], completed: [...completed] });
+    flowStorage.setItem('flowHistory', flowHistory);
 };
 </script>
 
