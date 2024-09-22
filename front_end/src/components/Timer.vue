@@ -1,4 +1,6 @@
 <script setup>
+import Storage from '@/utils/storageUtils.js';
+import dateUtils from '@/utils/dateUtils.js';
 import { ref, onMounted, onBeforeUnmount } from 'vue';
 import alarmSound from '/assets/alarm.mp3';
 
@@ -7,66 +9,113 @@ const props = defineProps({
     value: Number,
 });
 
-onBeforeUnmount(() => {
-    clearInterval(countdown);
+const timerStorage = new Storage('localStorage');
+
+const tick = 50;
+let countdown;
+let count = ref(0);
+var state = ref("idle");
+
+onMounted(() => {
+    // Timers always start in idle
+    state.value = "idle";
+    // TODO: set the timer to the local value
+    initTimer();
 });
 
-var minute = ref(props.value);
-var seconds = ref(0);
+onBeforeUnmount(() => {
+    clearInterval(countdown);
+    timerStorage.removeItem('timer-' + props.id);
+});
+
+const initTimer = () => {
+    timerStorage.setItem('timer-' + props.id, props.value * 60);
+    count.value = props.value * 60;
+};
+
+// state transition function
+const transition = (action) => {
+    switch (state.value) {
+        case "idle":
+            if (action == "start") {
+                state.value = "running";
+                countdown = setInterval(decrement, tick);
+            }
+            break;
+        case "running":
+            switch (action) {
+                case "pause":
+                    state.value = "paused";
+                    clearInterval(countdown);
+                    break;
+                case "reset":
+                    state.value = "idle";
+                    clearInterval(countdown);
+                    initTimer();
+                    break;
+            }
+            break;
+        case "paused":
+            switch (action) {
+                case "start":
+                    state.value = "running";
+                    countdown = setInterval(decrement, tick);
+                    break;
+                case "reset":
+                    state.value = "idle";
+                    clearInterval(countdown);
+                    initTimer();
+                    break;
+            }
+            break;
+        case "ring":
+            if (action == "dismiss") {
+                state.value = "idle";
+                clearInterval(countdown);
+                document.getElementById(`timer-${props.id}`).classList.remove("fade-in-out");
+                initTimer();
+            }
+            break;
+    }
+
+    if (action == "plusOne") {
+        let name = 'timer-' + props.id;
+        let value = timerStorage.getItem(name) + 60;
+        timerStorage.setItem(name, value);
+        count.value = value;
+    }
+};
 
 const decrement = () => {
-    try {
-        document.getElementById(`timer-${props.id}`).classList.remove("fade-in-out");
-    } catch (error) {
-        clearInterval(countdown);
-    }
-    if (seconds.value == 0 && minute.value == 0) {
+    let name = 'timer-' + props.id;
+    let value = timerStorage.getItem(name) - 1;
+    // Decrement the timer
+    timerStorage.setItem(name, value);
+    count.value = value;
+    // Check if time is up yet
+    if (value == 0) {
+        // Time is up! Move state!
+        state.value = "ring";
         clearInterval(countdown);
         document.getElementById(`timer-${props.id}`).classList.add("fade-in-out");
-        let audio = new Audio(alarmSound);
-        audio.play();
-    } else if (seconds.value == 0) {
-        seconds.value = 59;
-        minute.value -= 1;
-    } else {
-        seconds.value -= 1;
     }
+
 };
 
-const reset = () => {
-    document.getElementById(`timer-${props.id}`).classList.remove("fade-in-out");
-    seconds.value = 0;
-    minute.value = props.value;
-};
 
-const plusOne = () => {
-    document.getElementById(`timer-${props.id}`).classList.remove("fade-in-out");
-    minute.value += 1;
-};
-
-const stop = () => {
-    minute.value = 0;
-    seconds.value = 0;
-};
-
-let countdown;
-
-const go = () => {
-    countdown = setInterval(decrement, 1000);
-};
 </script>
 
 <template>
     <div style="width: 180px; padding: 8px; margin: 15px;" class="border border-rnd">
-        <h2 :id="'timer-' + props.id.toString()" style="text-align: center;">{{ minute }}:{{ seconds.toString().padStart(2, '0') }}</h2>
-        <div style="display: flex;">
-            <button @click="go" class="timer-btn green-bg">Start</button>
-            <div style="width: 10px;"></div>
-            <button @click="plusOne" class="timer-btn">+1</button>
-            <div style="width: 10px;"></div>
-            <button @click="reset" class="timer-btn orange-bg">Reset</button>
-            <div style="width: 10px;"></div>
-            <button @click="stop" class="timer-btn red-bg">Stop</button>
+        <h2 :id="'timer-' + props.id.toString()" style="text-align: center;">
+            {{ dateUtils.formatTime(count) }}
+        </h2>
+        <div style="display: flex; flex-direction: row; gap: 10px; justify-content: space-around;">
+            <button v-if="['idle', 'paused'].includes(state)" @click="transition('start')" class="timer-btn green-bg">&#9658;</button>
+            <button v-if="['running'].includes(state)" @click="transition('pause')" class="timer-btn orange-bg"><b>&#124; &#124;</b></button>
+            <button v-if="['running', 'paused'].includes(state)" @click="transition('plusOne')" class="timer-btn"><b>+1</b></button>
+            <button v-if="['running', 'paused'].includes(state)" @click="transition('reset')" class="timer-btn red-bg">&#9632;</button>
+            <button v-if="['ring'].includes(state)" @click="transition('dismiss')" class="timer-btn red-bg"><b>Dismiss</b></button>
         </div>
     </div>
 </template>

@@ -93,4 +93,10 @@ function incrementDate(dateString) {
     return `${year}-${month}-${day}`;
 }
 
-export default { formatDate, getDateRange, getTodayDate, incrementDate, decrementDate };
+function formatTime(seconds) {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
+}
+
+export default { formatDate, getDateRange, getTodayDate, incrementDate, decrementDate, formatTime };
