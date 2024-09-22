@@ -6,10 +6,13 @@ import { useIngredientStore } from '@/stores/useIngredientStore.js';
 import { useRouter } from 'vue-router';
 import { ref, reactive, onMounted } from 'vue';
 import axios from 'axios';
+import Storage from '@/utils/storageUtils.js';
 
 const router = useRouter();
 const mealStore = useMealStore();
 const ingredientStore = useIngredientStore();
+
+const formStorage = new Storage('localStorage');
 
 const props = defineProps({
     id: String,
@@ -17,13 +20,38 @@ const props = defineProps({
 
 var data = {};
 
-var name = ref(data.name);
-var time = ref(data.time);
-var difficulty = ref(data.difficulty);
+const getCache = () => {
+    if (formStorage.hasItem('editMealForm' + props.id)) {
+        let cached = formStorage.getItem('editMealForm' + props.id);
+        return {
+            name: cached.name,
+            time: cached.time,
+            difficulty: cached.difficulty,
+            instructions: cached.instructions,
+            ingredients: cached.ingredients,
+            notes: cached.notes,
+            rating: cached.rating,
+        };
+    } else {
+        return {
+            name: data.name,
+            time: data.time,
+            difficulty: data.difficulty,
+            instructions: data.instructions,
+            ingredients: data.ingredients,
+            rating: data.rating,
+            notes: data.notes,
+        };
+    }
+};
+
+var name = ref('');
+var time = ref(0);
+var difficulty = ref('easy');
 var instructions = ref([]);
 var ingredients = ref([]);
-var rating = ref(data.rating);
-var notes = ref(data.notes);
+var rating = ref('neutral');
+var notes = ref('');
 
 const ingred_id = ref(1);
 const ingred_amount = ref(0);
@@ -35,14 +63,14 @@ onMounted(async () => {
         await ingredientStore.query();
         await mealStore.query();
         data = mealStore.getMeals.find(meal => meal.id == props.id);
-        name.value = data.name;
-        time.value = data.time;
-        difficulty.value = data.difficulty;
-        instructions.value = data.instructions;
         data.ingredients.map(i => i.amount = i.MealIngredients.amount);
-        ingredients.value = data.ingredients;
-        rating.value = data.rating;
-        notes.value = data.notes;
+        name.value = getCache().name;
+        time.value = getCache().time;
+        difficulty.value = getCache().difficulty;
+        instructions.value = getCache().instructions;
+        ingredients.value = getCache().ingredients;
+        rating.value = getCache().rating;
+        notes.value = getCache().notes;
         instructions_json.value = '';
         instructions.value.forEach((i, idx) => {
             instructions_json.value += `${idx}: ${i.command}(${i.timer}) -> ${i.next}\n`;
@@ -66,7 +94,12 @@ const applyEdit = async () => {
     };
     // Update database
     try {
-        const add_response = axios.put(`/api/meal/${props.id}`, body);
+        clearInterval(cacher);
+        const add_response = await axios.put(`/api/meal/${props.id}`, body);
+        // Clear the cache if confirmed to have saved in the database
+        if (add_response.status == 200) {
+            formStorage.removeItem('editMealForm' + props.id);
+        }
         // Return the user to the list of meals
         await mealStore.query();
         router.push('/cookbook');
@@ -102,6 +135,21 @@ const removeIngredientFromMeal = (id) => {
     const idx = ingredients.value.findIndex(i => i.id == id);
     ingredients.value.splice(idx, 1);
 };
+
+const cacheFormData = () => {
+    let data = {
+        name: name.value,
+        time: time.value,
+        difficulty: difficulty.value,
+        instructions: instructions.value,
+        ingredients: ingredients.value,
+        notes: notes.value,
+        rating: rating.value,
+    };
+    formStorage.setItem('editMealForm' + props.id, data);
+};
+
+const cacher = setInterval(cacheFormData, 5000);
 
 </script>
 

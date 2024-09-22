@@ -92,9 +92,6 @@ const createMeal = async () => {
         // Clear the cache if confirmed to have saved in the database
         if (add_response.status == 200) {
             formStorage.removeItem('newMealForm');
-            if (formStorage.hasItem('newMealForm')) {
-                console.log("WHY NOT DELETING!!!");
-            }
         }
         // Return the user to the list of meals
         router.push('/cookbook');
@@ -152,7 +149,6 @@ const removeIngredientFromMeal = (id) => {
 };
 
 const cacheFormData = () => {
-    console.log("I hope you like pain");
     let data = {
         name: name.value,
         time: time.value,
