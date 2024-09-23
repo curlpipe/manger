@@ -1,5 +1,6 @@
 <script setup>
-import Timer from '@/components/Timer.vue';
+import Timer from '@/utils/timerUtils.js';
+import dateUtils from '@/utils/dateUtils.js';
 import MealFlow from '@/components/cookbook/MealFlow.vue';
 import { ref, reactive, onMounted } from 'vue';
 import { useRouter } from 'vue-router';
@@ -21,6 +22,8 @@ var flowHistory = flowStorage.hasItem('flowHistory') ? flowStorage.getItem('flow
 var completed = [];
 var current = ref(flowStorage.hasItem('flowCurrent') ? flowStorage.getItem('flowCurrent') : [0]);
 
+var timers = ref([]);
+
 onMounted(async () => {
     const response = await axios.get(`/api/meal/${props.id}`);
     meal.value = response.data;
@@ -34,6 +37,9 @@ onMounted(async () => {
     }
     // Hide navbar
     document.getElementById('navbar').style.display = 'none';
+    // Set up timers so they are ready
+    meal.value.instructions.filter(i => i.timer != null).forEach(i => timers.value[i.id] = new Timer(i.id, i.timer))
+    console.log(timers.value);
 });
 
 const done = (idx) => {
@@ -135,7 +141,21 @@ const begin = () => {
                 <h5 style="text-align: center;">{{ meal.instructions[step].command }}</h5>
                 <p v-if="meal.instructions[step].timer != null">(for {{ meal.instructions[step].timer }} mins)</p>
                 <button class="green-bg" @click="done(step)">Done</button>
-                <Timer v-if="meal.instructions[step].timer != null" :id="step" :value="meal.instructions[step].timer"/>
+                <!-- -->
+                <div v-if="meal.instructions[step].timer != null" style="width: 180px; padding: 8px; margin: 15px;" class="border border-rnd">
+                    <div style="display: none;">{{ timers[step].forceRefresh }}</div>
+                    <h2 :id="'timer-' + step.toString()" style="text-align: center;">
+                        {{ dateUtils.formatTime(timers[step].get()) }}
+                    </h2>
+                    <div style="display: flex; flex-direction: row; gap: 10px; justify-content: space-around;">
+                        <button v-if="['idle', 'paused'].includes(timers[step].state)" @click="timers[step].transition('start')" class="timer-btn green-bg">&#9658;</button>
+                        <button v-if="['running'].includes(timers[step].state)" @click="timers[step].transition('pause')" class="timer-btn orange-bg"><b>&#124; &#124;</b></button>
+                        <button v-if="['running', 'paused'].includes(timers[step].state)" @click="timers[step].transition('plusOne')" class="timer-btn"><b>+1</b></button>
+                        <button v-if="['running', 'paused'].includes(timers[step].state)" @click="timers[step].transition('reset')" class="timer-btn red-bg">&#9632;</button>
+                        <button v-if="['ring'].includes(timers[step].state)" @click="timers[step].transition('dismiss')" class="timer-btn red-bg"><b>Dismiss</b></button>
+                    </div>
+                </div>
+                <!-- -->
             </div>
         </div>
     </div>
