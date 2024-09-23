@@ -1,7 +1,7 @@
 import Storage from '@/utils/storageUtils.js';
 import dateUtils from '@/utils/dateUtils.js';
 
-const tick = 10;
+const tick = 1000;
 
 class Timer {
     constructor(id, init) {
