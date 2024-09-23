@@ -13,7 +13,9 @@ class Timer {
         this.countdown = null;
         this.beeper = null;
         this.forceRefresh = 0;
-        this.initTimer();
+        if (!this.storage.hasItem(this.key)) {
+            this.initTimer();
+        }
     }
 
     // Initialise timer
@@ -68,36 +70,33 @@ class Timer {
         }
 
         if (action == "plusOne") {
-            this.set(this.get() + 60);
+            this.set(this.get().value + 60);
         }
+
+        this.set(this.get().value);
         this.rerender();
     }
 
     // Decrement function
     decrement(t) {
-        let value = t.get() - 1;
+        let value = t.get().value - 1;
         // Decrement the timer
-        t.set(value);
         // Check if the time is up
         if (value == 0) {
+            clearInterval(t.countdown);
             // Time is up! Move state!
             t.state = "ring";
-            clearInterval(this.countdown);
-            this.beep();
-            document.getElementById(this.key).classList.add("fade-in-out");
+            let sound = new Audio('/assets/alarm.mp3');
+            t.beeper = setInterval(() => sound.play(), 700);
+            document.getElementById(t.key).classList.add("fade-in-out");
         }
+        t.set(value);
         t.rerender();
-    }
-
-    // Play a beep sound
-    beep() {
-        let sound = new Audio('/assets/alarm.mp3');
-        this.beeper = setInterval(() => sound.play(), 700);
     }
 
     // Set value
     set(val) {
-        this.storage.setItem(this.key, val);
+        this.storage.setItem(this.key, { state: this.state, value: val });
     }
 
     // Get value
@@ -105,11 +104,62 @@ class Timer {
         return this.storage.getItem(this.key);
     }
 
+    // Restore timer to a cached state
+    restore() {
+        let cached = this.get();
+        this.state = cached.state;
+        switch (cached.state) {
+            case 'idle':
+                // No fade-in-out animation
+                try { document.getElementById(this.key).classList.remove("fade-in-out"); } catch {}
+                // No beeping
+                clearInterval(this.beeper);
+                // No decrementing
+                clearInterval(this.countdown);
+                // Value = init
+                this.initTimer();
+                break;
+            case 'running':
+                // No fade-in-out animation
+                try { document.getElementById(this.key).classList.remove("fade-in-out"); } catch {}
+                // No beeping
+                clearInterval(this.beeper);
+                // YES decrementing
+                this.countdown = setInterval(() => this.decrement(this), tick);
+                // value = value from cache (done as standard)
+                break;
+            case 'paused':
+                // No fade-in-out animation
+                try { document.getElementById(this.key).classList.remove("fade-in-out"); } catch {}
+                // No beeping
+                clearInterval(this.beeper);
+                // No decrementing
+                clearInterval(this.countdown);
+                // value = value from cache (done as standard)
+                break;
+            case 'ring':
+                // YES fade-in-out animation
+                try { document.getElementById(this.key).classList.add("fade-in-out"); } catch {}
+                // YES beeping
+                let sound = new Audio('/assets/alarm.mp3');
+                this.beeper = setInterval(() => sound.play(), 700);
+                // No decrementing
+                clearInterval(this.countdown);
+                // value = 0
+                this.set(0);
+                break;
+        }
+        this.rerender();
+    }
+
     // Clean up any remaining mess
     clean() {
-        document.getElementById(this.key).classList.add("fade-in-out");
+        try {
+            document.getElementById(this.key).classList.remove("fade-in-out");
+        } catch {}
         clearInterval(this.countdown);
         clearInterval(this.beeper);
+        this.storage.removeItem(this.key);
     }
 
     // Force a re-render

@@ -2,7 +2,7 @@
 import Timer from '@/utils/timerUtils.js';
 import dateUtils from '@/utils/dateUtils.js';
 import MealFlow from '@/components/cookbook/MealFlow.vue';
-import { ref, reactive, onMounted } from 'vue';
+import { ref, reactive, onMounted, onBeforeUnmount } from 'vue';
 import { useRouter } from 'vue-router';
 import axios from 'axios';
 import Storage from '@/utils/storageUtils.js';
@@ -24,6 +24,8 @@ var current = ref(flowStorage.hasItem('flowCurrent') ? flowStorage.getItem('flow
 
 var timers = ref([]);
 
+const sleep = async (ms) => new Promise((callback) => setTimeout(callback, ms));
+
 onMounted(async () => {
     const response = await axios.get(`/api/meal/${props.id}`);
     meal.value = response.data;
@@ -38,8 +40,19 @@ onMounted(async () => {
     // Hide navbar
     document.getElementById('navbar').style.display = 'none';
     // Set up timers so they are ready
-    meal.value.instructions.filter(i => i.timer != null).forEach(i => timers.value[i.id] = new Timer(i.id, i.timer))
-    console.log(timers.value);
+    meal.value.instructions
+        .filter(i => i.timer != null)
+        .forEach(async i => {
+            timers.value[i.id] = new Timer(i.id, i.timer);
+            if (timers.value[i.id].storage.hasItem(timers.value[i.id].key)) {
+                await sleep(100);
+                timers.value[i.id].restore();
+            }
+        });
+});
+
+onBeforeUnmount(() => {
+    timers.value.forEach(t => t.clean());
 });
 
 const done = (idx) => {
@@ -145,7 +158,7 @@ const begin = () => {
                 <div v-if="meal.instructions[step].timer != null" style="width: 180px; padding: 8px; margin: 15px;" class="border border-rnd">
                     <div style="display: none;">{{ timers[step].forceRefresh }}</div>
                     <h2 :id="'timer-' + step.toString()" style="text-align: center;">
-                        {{ dateUtils.formatTime(timers[step].get()) }}
+                        {{ dateUtils.formatTime(timers[step].get().value) }}
                     </h2>
                     <div style="display: flex; flex-direction: row; gap: 10px; justify-content: space-around;">
                         <button v-if="['idle', 'paused'].includes(timers[step].state)" @click="timers[step].transition('start')" class="timer-btn green-bg">&#9658;</button>
